@@ -1,0 +1,167 @@
+metadata:
+  title: Company System Landscape
+  description: Overview of all company systems and their interconnections
+  version: '1.0'
+  author: System Architecture Team
+
+systems:
+  - id: crm-system
+    name: CRM System
+    type: customer-facing
+    description: Customer relationship management platform
+    owner: Sales Team
+    technology: Salesforce
+    position:
+      x: 100
+      y: 100
+    style:
+      color: '#4A90E2'
+      icon: users
+
+  - id: billing-system
+    name: Billing System
+    type: backend
+    description: Invoice and payment processing
+    owner: Finance Team
+    technology: Custom Python/Django
+    position:
+      x: 400
+      y: 100
+    style:
+      color: '#E94B3C'
+      icon: dollar-sign
+
+  - id: inventory-system
+    name: Inventory Management
+    type: backend
+    description: Product and warehouse management
+    owner: Operations Team
+    technology: SAP
+    position:
+      x: 700
+      y: 100
+    style:
+      color: '#F39C12'
+      icon: package
+
+  - id: main-database
+    name: Main Database
+    type: database
+    description: PostgreSQL primary database
+    owner: IT Team
+    technology: PostgreSQL 15
+    position:
+      x: 400
+      y: 300
+    style:
+      color: '#336791'
+      icon: database
+
+  - id: analytics-platform
+    name: Analytics Platform
+    type: analytics
+    description: Business intelligence and reporting
+    owner: Data Team
+    technology: Tableau + Snowflake
+    position:
+      x: 100
+      y: 500
+    style:
+      color: '#8E44AD'
+      icon: bar-chart
+
+  - id: external-payment
+    name: Payment Gateway
+    type: external
+    description: External payment processor
+    owner: Finance Team
+    technology: Stripe
+    position:
+      x: 700
+      y: 300
+    style:
+      color: '#6772E5'
+      icon: credit-card
+
+connections:
+  - from: crm-system
+    to: billing-system
+    label: Customer Orders
+    type: api
+    description: REST API calls for order creation
+    style:
+      lineStyle: solid
+      animated: false
+
+  - from: crm-system
+    to: main-database
+    label: Customer Data
+    type: database
+    description: Direct database connection
+    style:
+      lineStyle: solid
+      animated: true
+
+  - from: billing-system
+    to: main-database
+    label: Store Invoices
+    type: database
+    description: Invoice and transaction storage
+    style:
+      lineStyle: solid
+      animated: true
+
+  - from: billing-system
+    to: external-payment
+    label: Process Payments
+    type: api
+    description: Payment processing via Stripe API
+    style:
+      lineStyle: dashed
+      animated: false
+
+  - from: inventory-system
+    to: main-database
+    label: Product Data
+    type: database
+    description: Product and stock information
+    style:
+      lineStyle: solid
+      animated: true
+
+  - from: inventory-system
+    to: billing-system
+    label: Stock Updates
+    type: message-queue
+    description: Real-time stock availability
+    style:
+      lineStyle: dotted
+      animated: true
+
+  - from: main-database
+    to: analytics-platform
+    label: Data Replication
+    type: database
+    description: Nightly ETL process
+    style:
+      lineStyle: dashed
+      animated: false
+
+groups:
+  - id: customer-facing
+    name: Customer-Facing Systems
+    systems:
+      - crm-system
+    style:
+      backgroundColor: '#E8F4F8'
+      borderColor: '#4A90E2'
+
+  - id: backend-core
+    name: Core Backend Systems
+    systems:
+      - billing-system
+      - inventory-system
+      - main-database
+    style:
+      backgroundColor: '#FFF4E6'
+      borderColor: '#F39C12'
