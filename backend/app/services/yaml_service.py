@@ -48,8 +48,9 @@ class YAMLService:
         Returns:
             str: YAML formatted string
         """
-        # Convert Pydantic model to dict
-        data = landscape.model_dump(by_alias=True, exclude_none=True)
+        # Convert Pydantic model to dict with JSON-safe serialization
+        # mode='json' ensures enums are converted to strings and datetime to ISO format
+        data = landscape.model_dump(mode='json', by_alias=True, exclude_none=True)
 
         # Custom YAML formatting
         yaml_str = yaml.dump(

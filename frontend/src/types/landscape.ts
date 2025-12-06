@@ -27,6 +27,14 @@ export enum LineStyle {
   DOTTED = 'dotted',
 }
 
+export enum EdgeType {
+  DEFAULT = 'default',
+  STRAIGHT = 'straight',
+  STEP = 'step',
+  SMOOTHSTEP = 'smoothstep',
+  BEZIER = 'bezier',
+}
+
 export interface Position {
   x: number;
   y: number;
@@ -38,6 +46,7 @@ export interface Style {
   backgroundColor?: string;
   borderColor?: string;
   lineStyle?: LineStyle;
+  edgeType?: EdgeType;
   animated?: boolean;
 }
 

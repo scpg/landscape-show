@@ -41,6 +41,7 @@ connections:
     description: "REST API calls"
     style:
       lineStyle: solid
+      edgeType: default
       animated: false
 
 groups:
@@ -158,13 +159,29 @@ Connections are the lines/edges between systems.
 ```yaml
 style:
   lineStyle: solid    # solid, dashed, or dotted
+  edgeType: default   # default (bezier), straight, step, smoothstep, or bezier
   animated: true      # Show animated flow
   color: "#666"       # Line color
 ```
 
-### Example Connection
+**Edge Types:**
+- `default` - Smooth bezier curve (default)
+- `bezier` - Alias for default, smooth bezier curve
+- `straight` - Direct straight line between nodes
+- `step` - Right-angled step line (hard corners)
+- `smoothstep` - Right-angled step line with rounded corners
+
+**Line Styles:**
+- `solid` - Solid line (default)
+- `dashed` - Dashed line
+- `dotted` - Dotted line
+
+You can combine edge types with line styles. For example: `edgeType: smoothstep` with `lineStyle: dashed`
+
+### Example Connections
 
 ```yaml
+# Smooth bezier curve with solid line
 - from: web-app
   to: api-gateway
   label: "HTTPS Requests"
@@ -172,6 +189,27 @@ style:
   description: "User requests routed through API gateway"
   style:
     lineStyle: solid
+    edgeType: default
+    animated: true
+
+# Straight line with dashed style
+- from: api-gateway
+  to: cache-service
+  label: "Cache Check"
+  type: api
+  style:
+    lineStyle: dashed
+    edgeType: straight
+    animated: false
+
+# Smooth step line (right angles with rounded corners)
+- from: service-a
+  to: service-b
+  label: "Event Stream"
+  type: message-queue
+  style:
+    lineStyle: dotted
+    edgeType: smoothstep
     animated: true
 ```
 
@@ -354,13 +392,13 @@ systems:
 connections:
   - {from: web-app, to: api-gateway, label: "HTTPS", type: api}
   - {from: mobile-app, to: api-gateway, label: "HTTPS", type: api}
-  - {from: api-gateway, to: product-service, label: "gRPC", type: api}
-  - {from: api-gateway, to: order-service, label: "gRPC", type: api}
-  - {from: api-gateway, to: payment-service, label: "gRPC", type: api}
+  - {from: api-gateway, to: product-service, label: "gRPC", type: api, style: {edgeType: straight}}
+  - {from: api-gateway, to: order-service, label: "gRPC", type: api, style: {edgeType: smoothstep}}
+  - {from: api-gateway, to: payment-service, label: "gRPC", type: api, style: {edgeType: step}}
   - {from: product-service, to: main-db, label: "SQL", type: database}
   - {from: order-service, to: main-db, label: "SQL", type: database}
   - {from: payment-service, to: main-db, label: "SQL", type: database}
-  - {from: payment-service, to: stripe, label: "REST API", type: api, style: {lineStyle: dashed}}
+  - {from: payment-service, to: stripe, label: "REST API", type: api, style: {lineStyle: dashed, edgeType: smoothstep}}
 
 groups:
   - id: frontend

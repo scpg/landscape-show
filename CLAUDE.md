@@ -1,5 +1,7 @@
 # Claude AI Coding Assistant Guidelines - Landscape Show
 
+
+
 ## Project Overview
 
 **Landscape Show** is a self-hosted system landscape visualization tool that allows users to define system architectures in simple YAML format and visualize them with interactive drag-and-drop diagrams.
@@ -305,6 +307,12 @@ npm run lint
 
 ## Important Notes for AI Assistants
 
+### Special directories 
+1. directories named `errors-and-logs`
+  * have to be used for storing temprary data associated only to development errors, logs, screenshots or any other file that might be needed for debugging or developing processes
+  * the content of this directory will never be sent to github (with the exception of the `.gitkeep` file, this is defined so in the `.gitignore` file)
+  * any temporary screenshot used during development needs to be placed here.
+
 ### When Modifying Backend
 
 1. **Always validate with Pydantic** before writing YAML files
@@ -454,4 +462,4 @@ For questions about the codebase or architecture, refer to:
 
 ---
 
-**Last Updated:** 2025-12-02 (Phase 2 Complete)
+**Last Updated:** 2025-12-05 

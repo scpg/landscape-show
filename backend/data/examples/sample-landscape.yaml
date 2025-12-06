@@ -84,67 +84,81 @@ systems:
       icon: credit-card
 
 connections:
+  # Edge Type: DEFAULT (Bezier curve) + Solid line
   - from: crm-system
     to: billing-system
-    label: Customer Orders
+    label: Customer Orders (default/bezier)
     type: api
-    description: REST API calls for order creation
+    description: REST API calls - DEFAULT edge type (curved bezier path)
     style:
       lineStyle: solid
+      edgeType: default
       animated: false
 
+  # Edge Type: STRAIGHT + Solid line
   - from: crm-system
     to: main-database
-    label: Customer Data
+    label: Customer Data (straight)
     type: database
-    description: Direct database connection
+    description: Direct database connection - STRAIGHT edge type
     style:
       lineStyle: solid
+      edgeType: straight
       animated: true
 
+  # Edge Type: STEP + Solid line
   - from: billing-system
     to: main-database
-    label: Store Invoices
+    label: Store Invoices (step)
     type: database
-    description: Invoice and transaction storage
+    description: Invoice storage - STEP edge type (right angles)
     style:
       lineStyle: solid
+      edgeType: step
       animated: true
 
+  # Edge Type: SMOOTHSTEP + Dashed line
   - from: billing-system
     to: external-payment
-    label: Process Payments
+    label: Process Payments (smoothstep)
     type: api
-    description: Payment processing via Stripe API
+    description: Stripe API - SMOOTHSTEP edge type (rounded corners) + DASHED
     style:
       lineStyle: dashed
+      edgeType: smoothstep
       animated: false
 
+  # Edge Type: BEZIER + Solid line
   - from: inventory-system
     to: main-database
-    label: Product Data
+    label: Product Data (bezier)
     type: database
-    description: Product and stock information
+    description: Product information - BEZIER edge type (explicit curved)
     style:
       lineStyle: solid
+      edgeType: bezier
       animated: true
 
+  # Edge Type: STRAIGHT + Dotted line
   - from: inventory-system
     to: billing-system
-    label: Stock Updates
+    label: Stock Updates (straight+dotted)
     type: message-queue
-    description: Real-time stock availability
+    description: Real-time stock - STRAIGHT edge + DOTTED line style
     style:
       lineStyle: dotted
+      edgeType: straight
       animated: true
 
+  # Edge Type: SMOOTHSTEP + Dashed line
   - from: main-database
     to: analytics-platform
-    label: Data Replication
+    label: Data Replication (smoothstep+dashed)
     type: database
-    description: Nightly ETL process
+    description: Nightly ETL - SMOOTHSTEP edge + DASHED line style
     style:
       lineStyle: dashed
+      edgeType: smoothstep
       animated: false
 
 groups:

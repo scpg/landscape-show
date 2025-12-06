@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(move:*)",
+      "Bash(ren:*)",
+      "Bash(uv venv:*)",
+      "Bash(~/.local/bin/uv --version)",
+      "Bash(python -m uv:*)",
+      "Bash(python3 -m uv:*)",
+      "Bash(~/.local/bin/uv venv:*)",
+      "Bash(~/.local/bin/uv pip install:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(curl:*)",
+      "Bash(PYTHONPATH=/mnt/c/dev/2025/landscape-show/backend .venv/bin/python:*)",
+      "Bash(python3:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Complete Phase 1 & 2 - Self-hosted landscape visualization tool\n\nImplement a comprehensive system landscape visualization tool that combines\nYAML-based diagram definitions with interactive drag-and-drop positioning.\nBuilt for privacy-focused organizations requiring self-hosted solutions.\n\n## Phase 1: Foundation Setup ✅\n\n### Backend (Python + FastAPI)\n- FastAPI application with async support\n- Pydantic models for YAML schema validation\n- YAML parser and serialization (PyYAML)\n- File service with async I/O (aiofiles)\n- REST API endpoints for landscape CRUD operations\n- Comprehensive data validation and error handling\n- Sample landscape with 8 systems and 7 connections\n\n### Frontend (TypeScript + React + Vite)\n- React 18 with TypeScript for type safety\n- Zustand state management\n- Axios API client with full endpoint coverage\n- TypeScript types mirroring backend Pydantic models\n- Vite build system with HMR\n\n## Phase 2: Core Visualization ✅\n\n### Interactive Diagram Canvas\n- React Flow integration for interactive diagrams\n- Custom system nodes with color-coding by type\n- Custom connection edges with multiple line styles\n- Drag-and-drop positioning with auto-save\n- Zoom, pan, and minimap controls\n- Real-time position updates to backend\n\n### Data Flow\n- YAML → Pydantic → API → React → React Flow\n- Drag event → Position update → API → YAML file\n- Bidirectional sync between visual and code\n\n### Visual Features\n- Color-coded system types (customer-facing, backend, database, etc.)\n- Connection labels with type indicators\n- Line styles: solid, dashed, dotted\n- Beautiful node styling with metadata display\n- Responsive layout with info overlay\n\n## Documentation 📚\n\n### Comprehensive Documentation System\n- CLAUDE.md: Complete technical reference for AI assistants\n- FILE_INDEX.md: Full file map and architecture guide\n- DOCUMENTATION_INDEX.md: Navigation guide for all docs\n- GETTING_STARTED.md: Quick start guide\n- PHASE2_COMPLETE.md: Feature documentation\n- docs/yaml-schema.md: Complete YAML reference\n- docs/deployment.md: Production deployment guide\n\n### Key Features Documented\n- YAML schema with examples\n- API endpoints with request/response formats\n- Component architecture and data flow\n- Development setup instructions\n- Troubleshooting guides\n\n## Technology Stack\n\n**Backend:**\n- Python 3.12+, FastAPI, Pydantic, PyYAML, Uvicorn\n- aiofiles, Playwright (future), websockets (future)\n\n**Frontend:**\n- TypeScript, React 18, Vite\n- React Flow 11, Zustand, Axios, js-yaml\n- Monaco Editor (Phase 3)\n\n**Development:**\n- uv for Python package management\n- npm for JavaScript dependencies\n- Git for version control\n\n## File Structure\n\n- backend/: Python FastAPI application\n  - app/: Main application code\n    - models/: Pydantic data models\n    - services/: Business logic (YAML, file operations)\n    - api/: REST API routes\n  - data/: YAML landscape files\n- frontend/: React TypeScript application\n  - src/components/: React components (DiagramCanvas, nodes, edges)\n  - src/stores/: Zustand state management\n  - src/services/: API client and utilities\n  - src/types/: TypeScript type definitions\n  - src/utils/: Data transformation utilities\n- docs/: User and technical documentation\n- docker/: Docker deployment (Phase 7)\n\n## Privacy & Security\n\n- Self-hosted: No external API calls\n- Complete data control and privacy\n- File-based storage (no database required)\n- Path sanitization to prevent directory traversal\n- CORS properly configured\n\n## Usage\n\n1. Backend: `PYTHONPATH=... python -m app.main` (port 8000)\n2. Frontend: `npm run dev` (port 5173)\n3. Create YAML files in backend/data/\n4. Visualize and drag-and-drop to position systems\n5. Changes auto-save to YAML\n\n## Next Steps\n\n- Phase 3: Monaco Editor for live YAML editing\n- Phase 4: Enhanced sync with WebSocket support\n- Phase 5: Export to PDF, PNG, SVG\n- Phase 6: UX enhancements (auto-layout, properties panel)\n- Phase 7: Docker deployment and packaging\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npx tsc:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(npx playwright install-deps:*)",
+      "Bash(npm install:*)",
+      "Bash(node test-edge-types.spec.cjs:*)",
+      "Bash(node test-edge-render.spec.cjs:*)",
+      "Bash(node:*)",
+      "Bash(ls:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

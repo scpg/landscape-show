@@ -33,6 +33,15 @@ class LineStyle(str, Enum):
     DOTTED = "dotted"
 
 
+class EdgeType(str, Enum):
+    """Edge types for connections (React Flow edge types)."""
+    DEFAULT = "default"  # Bezier curve (default React Flow edge)
+    STRAIGHT = "straight"
+    STEP = "step"
+    SMOOTHSTEP = "smoothstep"
+    BEZIER = "bezier"  # Alias for default
+
+
 class Position(BaseModel):
     """Position coordinates for a system on the canvas."""
     x: float = Field(..., description="X coordinate")
@@ -45,7 +54,8 @@ class Style(BaseModel):
     icon: Optional[str] = Field(None, description="Icon name")
     backgroundColor: Optional[str] = Field(None, description="Background color for groups")
     borderColor: Optional[str] = Field(None, description="Border color")
-    lineStyle: Optional[LineStyle] = Field(LineStyle.SOLID, description="Line style for connections")
+    lineStyle: Optional[LineStyle] = Field(LineStyle.SOLID, description="Line style for connections (solid, dashed, dotted)")
+    edgeType: Optional[EdgeType] = Field(EdgeType.DEFAULT, description="Edge type for connections (default, straight, step, smoothstep, bezier)")
     animated: Optional[bool] = Field(False, description="Whether connection is animated")
 
 

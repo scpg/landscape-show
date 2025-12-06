@@ -1,0 +1,55 @@
+/**
+ * YAML Editor Highlight Styles
+ *
+ * Styles for Monaco Editor decorations used in bidirectional highlighting
+ * between YAML editor and diagram canvas.
+ */
+
+/* Primary selection - System (background highlight) */
+.yaml-highlight-system {
+  background-color: rgba(74, 144, 226, 0.15) !important;
+}
+
+/* Primary selection - System (gutter bar) */
+.yaml-highlight-glyph {
+  background: linear-gradient(to right, #4A90E2 4px, transparent 4px);
+  width: 6px !important;
+}
+
+/* Primary selection - Connection (background highlight) */
+.yaml-highlight-connection {
+  background-color: rgba(243, 156, 18, 0.15) !important;
+}
+
+/* Primary selection - Connection (gutter bar) */
+.yaml-highlight-glyph-connection {
+  background: linear-gradient(to right, #F39C12 4px, transparent 4px);
+  width: 6px !important;
+}
+
+/* Related elements (subtle background highlight) */
+.yaml-highlight-related {
+  background-color: rgba(74, 144, 226, 0.08) !important;
+}
+
+/* Line decoration (margin indicator) for primary selection */
+.yaml-highlight-line-decoration {
+  background: #4A90E2;
+  width: 4px !important;
+  margin-left: 3px;
+}
+
+/* Line decoration (margin indicator) for related elements */
+.yaml-highlight-line-decoration-subtle {
+  background: #4A90E2;
+  width: 2px !important;
+  margin-left: 4px;
+  opacity: 0.5;
+}
+
+/* Smooth transitions for highlight changes */
+.yaml-highlight-system,
+.yaml-highlight-connection,
+.yaml-highlight-related {
+  transition: background-color 0.3s ease;
+}

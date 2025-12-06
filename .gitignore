@@ -82,3 +82,7 @@ coverage/
 *.bak
 *.swp
 .cache/
+
+# Development/Debug directories
+errors-and-logs/*
+!errors-and-logs/.gitkeep

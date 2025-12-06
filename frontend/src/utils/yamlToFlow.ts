@@ -50,6 +50,7 @@ function connectionToEdge(connection: Connection): Edge {
     data: {
       connection: connection,
       lineStyle: connection.style?.lineStyle || 'solid',
+      edgeType: connection.style?.edgeType || 'default',
     },
   };
 }

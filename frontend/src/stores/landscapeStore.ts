@@ -5,6 +5,20 @@
 import { create } from 'zustand';
 import type { Landscape, LandscapeListItem } from '@/types/landscape';
 import { api } from '@/services/api';
+import { YamlLineMapper } from '@/utils/yamlLineMapper';
+
+// Highlight state for bidirectional editor-diagram synchronization
+interface HighlightState {
+  selectedNodeIds: string[];      // Selected system IDs from diagram
+  selectedEdgeIds: string[];      // Selected connection IDs from diagram
+  cursorLine: number | null;      // Current cursor line in YAML editor
+  highlightedFromYaml: {          // Element under cursor in YAML
+    type: 'system' | 'connection' | null;
+    id: string | null;
+  };
+  relatedEdgeIds: string[];       // Connections related to selected systems
+  selectionSource: 'diagram' | 'yaml' | null; // Track selection source to prevent loops
+}
 
 interface LandscapeState {
   // Current landscape
@@ -20,6 +34,9 @@ interface LandscapeState {
   isSaving: boolean;
   error: string | null;
 
+  // Highlight state for bidirectional sync
+  highlightState: HighlightState;
+
   // Actions
   loadLandscapes: () => Promise<void>;
   loadLandscape: (landscapeId: string) => Promise<void>;
@@ -28,6 +45,12 @@ interface LandscapeState {
   updateLandscape: (landscape: Landscape) => void;
   updatePositions: (landscapeId: string, updates: Record<string, { x: number; y: number }>) => Promise<void>;
   clearError: () => void;
+
+  // Highlight actions
+  setSelectedNodes: (nodeIds: string[], source?: 'diagram' | 'yaml') => void;
+  setSelectedEdges: (edgeIds: string[], source?: 'diagram' | 'yaml') => void;
+  setCursorLine: (line: number | null) => void;
+  clearHighlights: () => void;
 }
 
 export const useLandscapeStore = create<LandscapeState>((set, get) => ({
@@ -39,6 +62,16 @@ export const useLandscapeStore = create<LandscapeState>((set, get) => ({
   isLoading: false,
   isSaving: false,
   error: null,
+
+  // Initial highlight state
+  highlightState: {
+    selectedNodeIds: [],
+    selectedEdgeIds: [],
+    cursorLine: null,
+    highlightedFromYaml: { type: null, id: null },
+    relatedEdgeIds: [],
+    selectionSource: null,
+  },
 
   // Load list of landscapes
   loadLandscapes: async () => {
@@ -122,5 +155,83 @@ export const useLandscapeStore = create<LandscapeState>((set, get) => ({
   // Clear error
   clearError: () => {
     set({ error: null });
+  },
+
+  // Highlight actions
+
+  // Set selected nodes from diagram
+  setSelectedNodes: (nodeIds: string[], source: 'diagram' | 'yaml' = 'diagram') => {
+    const landscape = get().currentLandscape;
+    if (!landscape) {
+      return;
+    }
+
+    // Find related edges (connections where from or to matches selected systems)
+    const relatedEdges = landscape.connections
+      .filter(conn => nodeIds.includes(conn.from) || nodeIds.includes(conn.to))
+      .map(conn => `${conn.from}-${conn.to}`);
+
+    set((state) => ({
+      highlightState: {
+        ...state.highlightState,
+        selectedNodeIds: nodeIds,
+        relatedEdgeIds: relatedEdges,
+        selectionSource: source,
+      },
+    }));
+  },
+
+  // Set selected edges from diagram
+  setSelectedEdges: (edgeIds: string[], source: 'diagram' | 'yaml' = 'diagram') => {
+    set((state) => ({
+      highlightState: {
+        ...state.highlightState,
+        selectedEdgeIds: edgeIds,
+        selectionSource: source,
+      },
+    }));
+  },
+
+  // Set cursor line from YAML editor
+  setCursorLine: (line: number | null) => {
+    const yamlContent = get().yamlContent;
+
+    if (!yamlContent || line === null) {
+      set((state) => ({
+        highlightState: {
+          ...state.highlightState,
+          cursorLine: line,
+          highlightedFromYaml: { type: null, id: null },
+          selectionSource: 'yaml',
+        },
+      }));
+      return;
+    }
+
+    // Parse YAML structure to find which element cursor is in
+    const highlighted = YamlLineMapper.getElementAtLine(yamlContent, line);
+
+    set((state) => ({
+      highlightState: {
+        ...state.highlightState,
+        cursorLine: line,
+        highlightedFromYaml: highlighted,
+        selectionSource: 'yaml',
+      },
+    }));
+  },
+
+  // Clear all highlights
+  clearHighlights: () => {
+    set((state) => ({
+      highlightState: {
+        selectedNodeIds: [],
+        selectedEdgeIds: [],
+        cursorLine: null,
+        highlightedFromYaml: { type: null, id: null },
+        relatedEdgeIds: [],
+        selectionSource: null,
+      },
+    }));
   },
 }));

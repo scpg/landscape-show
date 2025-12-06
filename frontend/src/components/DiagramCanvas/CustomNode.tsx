@@ -11,12 +11,27 @@ interface CustomNodeProps {
     label: string;
     system: System;
     color: string;
+    isRelated?: boolean;  // Flag for related nodes (connected to selected system)
   };
   selected?: boolean;
 }
 
 function CustomNode({ data, selected }: CustomNodeProps) {
-  const { label, system, color } = data;
+  const { label, system, color, isRelated } = data;
+
+  // Calculate box shadow based on state
+  const getBoxShadow = () => {
+    if (selected) {
+      // Primary selection: Strong glow with soft halo
+      return `0 0 20px 4px ${color}80, 0 0 40px 8px ${color}40, 0 4px 12px rgba(0,0,0,0.15)`;
+    } else if (isRelated) {
+      // Related node: Subtle glow
+      return `0 0 12px 2px ${color}40, 0 2px 8px rgba(0,0,0,0.1)`;
+    } else {
+      // Default shadow
+      return '0 2px 8px rgba(0,0,0,0.1)';
+    }
+  };
 
   return (
     <div
@@ -25,12 +40,11 @@ function CustomNode({ data, selected }: CustomNodeProps) {
         borderRadius: '8px',
         backgroundColor: '#ffffff',
         border: `3px solid ${color}`,
-        boxShadow: selected
-          ? `0 0 0 2px ${color}40, 0 4px 12px rgba(0,0,0,0.15)`
-          : '0 2px 8px rgba(0,0,0,0.1)',
+        boxShadow: getBoxShadow(),
         minWidth: '180px',
-        transition: 'all 0.2s ease',
+        transition: 'all 0.3s ease',  // Smooth transition for glow changes
         cursor: 'grab',
+        transform: selected ? 'scale(1.02)' : 'scale(1)',  // Slight scale on selection
       }}
     >
       {/* Connection handles */}
