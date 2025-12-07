@@ -29,7 +29,7 @@
 
 ### Development Tools
 - **uv** (preferred) or pip for Python dependencies
-- **npm** for JavaScript dependencies
+- **pnpm** for JavaScript dependencies (required for WSL environments)
 
 ## Project Structure
 
@@ -124,7 +124,7 @@ API docs: http://localhost:8000/docs
 ### Frontend
 ```bash
 cd frontend
-npm run dev
+pnpm dev
 ```
 Frontend runs on: http://localhost:5173
 
@@ -275,16 +275,16 @@ pytest tests/
 cd frontend
 
 # Install dependencies
-npm install
+pnpm install
 
 # Run dev server
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Lint code
-npm run lint
+pnpm lint
 ```
 
 ## Code Style Guidelines

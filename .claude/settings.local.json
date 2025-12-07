@@ -24,7 +24,9 @@
       "Bash(node test-edge-types.spec.cjs:*)",
       "Bash(node test-edge-render.spec.cjs:*)",
       "Bash(node:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(.venv/bin/pip install:*)",
+      "Bash(.venv/bin/playwright install:*)"
     ],
     "deny": [],
     "ask": []

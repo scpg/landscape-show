@@ -35,7 +35,7 @@ Landscape Show allows you to create and visualize system architecture diagrams u
 
 - Python 3.10 or higher
 - Node.js 18 or higher
-- npm or yarn
+- pnpm (recommended for WSL environments)
 
 ### Installation
 
@@ -54,7 +54,7 @@ Landscape Show allows you to create and visualize system architecture diagrams u
 3. **Frontend Setup**
    ```bash
    cd frontend
-   npm install
+   pnpm install
    ```
 
 ### Running the Application
@@ -68,7 +68,7 @@ Landscape Show allows you to create and visualize system architecture diagrams u
 
 2. **Start the frontend** (from the `frontend` directory):
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
 3. **Access the application**:

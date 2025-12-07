@@ -34,7 +34,7 @@ PYTHONPATH=/mnt/c/dev/2025/landscape-show/backend .venv/bin/python -m app.main
 **Terminal 2 - Frontend:**
 ```bash
 cd frontend
-npm run dev
+pnpm dev
 ```
 
 Then open: http://localhost:5173
@@ -163,7 +163,7 @@ curl http://localhost:8000/health
 - Check the proxy settings in `vite.config.ts`
 
 **Problem: "Cannot find module"**
-- Run: `npm install`
+- Run: `pnpm install`
 
 ## Development Tips
 
