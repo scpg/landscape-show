@@ -26,12 +26,12 @@ systems:
     description: "Customer relationship management"
     owner: "Sales Team"
     technology: "Salesforce"
-    position:
-      x: 100
-      y: 100
     style:
       color: "#4A90E2"
       icon: "users"
+    position:
+      x: 100
+      y: 100
 
 connections:
   - from: crm-system
@@ -78,16 +78,21 @@ metadata:
 
 Systems are the boxes/nodes in your diagram.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | string | Yes | Unique identifier (lowercase, hyphens/underscores only) |
-| `name` | string | Yes | Display name |
-| `type` | enum | Yes | Type of system (see types below) |
-| `description` | string | No | What the system does |
-| `owner` | string | No | Team or person responsible |
-| `technology` | string | No | Technology stack or vendor |
-| `position` | object | Yes | X,Y coordinates on canvas |
-| `style` | object | No | Visual styling options |
+**Field Order (by importance):**
+1. **Primary (Business/Logical)**: Core information about what the system is
+2. **Secondary (Visual)**: How the system looks in the diagram
+3. **Tertiary (Technical/UI)**: Where the system is positioned
+
+| Field | Type | Required | Importance | Description |
+|-------|------|----------|------------|-------------|
+| `id` | string | Yes | Primary | Unique identifier (lowercase, hyphens/underscores only) |
+| `name` | string | Yes | Primary | Display name |
+| `type` | enum | Yes | Primary | Type of system (see types below) |
+| `description` | string | No | Primary | What the system does |
+| `owner` | string | No | Primary | Team or person responsible |
+| `technology` | string | No | Primary | Technology stack or vendor |
+| `style` | object | No | Secondary | Visual styling options |
+| `position` | object | Yes | Tertiary | X,Y coordinates on canvas (auto-updated by UI) |
 
 ### System Types
 
@@ -125,11 +130,11 @@ style:
   description: "Stripe payment processing"
   owner: "Finance Team"
   technology: "Stripe API"
+  style:
+    color: "#6772E5"
   position:
     x: 500
     y: 300
-  style:
-    color: "#6772E5"
 ```
 
 ## Connections Section
@@ -323,8 +328,8 @@ systems:
     description: "Customer-facing e-commerce website"
     owner: "Frontend Team"
     technology: "React + Next.js"
-    position: {x: 400, y: 50}
     style: {color: "#4A90E2"}
+    position: {x: 400, y: 50}
 
   - id: mobile-app
     name: "Mobile App"
@@ -332,8 +337,8 @@ systems:
     description: "iOS and Android mobile apps"
     owner: "Mobile Team"
     technology: "React Native"
-    position: {x: 700, y: 50}
     style: {color: "#4A90E2"}
+    position: {x: 700, y: 50}
 
   - id: api-gateway
     name: "API Gateway"
@@ -341,8 +346,8 @@ systems:
     description: "Kong API Gateway"
     owner: "Platform Team"
     technology: "Kong"
-    position: {x: 550, y: 200}
     style: {color: "#F39C12"}
+    position: {x: 550, y: 200}
 
   - id: product-service
     name: "Product Service"
@@ -350,8 +355,8 @@ systems:
     description: "Product catalog and inventory"
     owner: "Backend Team"
     technology: "Node.js"
-    position: {x: 300, y: 350}
     style: {color: "#F39C12"}
+    position: {x: 300, y: 350}
 
   - id: order-service
     name: "Order Service"
@@ -359,8 +364,8 @@ systems:
     description: "Order processing and management"
     owner: "Backend Team"
     technology: "Node.js"
-    position: {x: 550, y: 350}
     style: {color: "#F39C12"}
+    position: {x: 550, y: 350}
 
   - id: payment-service
     name: "Payment Service"
@@ -368,8 +373,8 @@ systems:
     description: "Payment processing"
     owner: "Backend Team"
     technology: "Java Spring"
-    position: {x: 800, y: 350}
     style: {color: "#F39C12"}
+    position: {x: 800, y: 350}
 
   - id: main-db
     name: "PostgreSQL"
@@ -377,8 +382,8 @@ systems:
     description: "Main relational database"
     owner: "Data Team"
     technology: "PostgreSQL 15"
-    position: {x: 550, y: 500}
     style: {color: "#336791"}
+    position: {x: 550, y: 500}
 
   - id: stripe
     name: "Stripe"
@@ -386,8 +391,8 @@ systems:
     description: "Payment gateway"
     owner: "Finance Team"
     technology: "Stripe API"
-    position: {x: 1000, y: 350}
     style: {color: "#6772E5"}
+    position: {x: 1000, y: 350}
 
 connections:
   - {from: web-app, to: api-gateway, label: "HTTPS", type: api}

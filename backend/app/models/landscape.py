@@ -70,14 +70,17 @@ class Metadata(BaseModel):
 
 class System(BaseModel):
     """A system in the landscape."""
+    # Primary: Business/Logical information
     id: str = Field(..., description="Unique identifier for the system")
     name: str = Field(..., description="Display name of the system")
     type: SystemType = Field(..., description="Type of system")
     description: Optional[str] = Field(None, description="Description of the system")
     owner: Optional[str] = Field(None, description="Team or person owning the system")
     technology: Optional[str] = Field(None, description="Technology stack")
-    position: Position = Field(..., description="Position on the canvas")
+    # Secondary: Visual styling
     style: Optional[Style] = Field(None, description="Visual styling options")
+    # Tertiary: Technical/UI positioning
+    position: Position = Field(..., description="Position on the canvas")
 
     @field_validator('id')
     @classmethod

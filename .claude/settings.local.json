@@ -26,7 +26,12 @@
       "Bash(node:*)",
       "Bash(ls:*)",
       "Bash(.venv/bin/pip install:*)",
-      "Bash(.venv/bin/playwright install:*)"
+      "Bash(.venv/bin/playwright install:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(PYTHONPATH=/home/scpg/dev/landscape-show/backend .venv/bin/python:*)"
     ],
     "deny": [],
     "ask": []
