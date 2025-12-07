@@ -47,9 +47,11 @@ export class YamlLineMapper {
     // Check cache
     const contentHash = this.hashContent(yamlContent);
     if (contentHash === this.lastYamlHash && this.lineMap.size > 0) {
+      console.log('[YamlLineMapper] Using cached line map, size:', this.lineMap.size);
       return; // Use cached map
     }
 
+    console.log('[YamlLineMapper] Building new line map from YAML content');
     this.lineMap.clear();
     this.lastYamlHash = contentHash;
 
@@ -126,8 +128,8 @@ export class YamlLineMapper {
           }
         }
 
-        // Detect system entries (indent === 2, starting with '- id:')
-        if (currentSection === 'systems' && indent === 2 && trimmed.startsWith('- id:')) {
+        // Detect system entries (indent === 0 or 2, starting with '- id:')
+        if (currentSection === 'systems' && (indent === 0 || indent === 2) && trimmed.startsWith('- id:')) {
           // Mark end of previous system
           if (currentSystemId && systemStartLine > 0) {
             this.markLineRange(systemStartLine, lineNum - 1, 'system', currentSystemId);
@@ -138,12 +140,13 @@ export class YamlLineMapper {
           if (match) {
             currentSystemId = match[1].trim();
             systemStartLine = lineNum;
+            console.log(`[YamlLineMapper] Found system: ${currentSystemId} at line ${lineNum}`);
           }
           return;
         }
 
-        // Detect connection entries
-        if (currentSection === 'connections' && indent === 2) {
+        // Detect connection entries (indent === 0 or 2)
+        if (currentSection === 'connections' && (indent === 0 || indent === 2)) {
           if (trimmed.startsWith('- from:')) {
             // Mark end of previous connection
             if (connectionStartLine > 0 && currentConnectionFrom && currentConnectionTo) {
@@ -177,6 +180,17 @@ export class YamlLineMapper {
         const connId = `${currentConnectionFrom}-${currentConnectionTo}`;
         this.markLineRange(connectionStartLine, lines.length, 'connection', connId);
       }
+
+      console.log('[YamlLineMapper] Built line map with', this.lineMap.size, 'line mappings');
+
+      // Debug: Show what systems were found
+      const systems = new Set<string>();
+      this.lineMap.forEach((mapping) => {
+        if (mapping.type === 'system' && mapping.id) {
+          systems.add(mapping.id);
+        }
+      });
+      console.log('[YamlLineMapper] Found systems:', Array.from(systems));
 
     } catch (error) {
       console.warn('Failed to build YAML line map:', error);

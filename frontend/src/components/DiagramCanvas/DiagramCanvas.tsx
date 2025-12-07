@@ -2,7 +2,7 @@
  * Main diagram canvas component using React Flow.
  */
 
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useMemo, useEffect, useRef } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -53,34 +53,53 @@ export default function DiagramCanvas({
   const [nodes, setNodes, onNodesChange] = useNodesState(initialFlow.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialFlow.edges);
 
+  // Track if we're making programmatic changes to prevent loops
+  const isProgrammaticChange = useRef(false);
+
   // Handle selection changes from diagram
   const handleSelectionChange = useCallback(
     ({ nodes: selectedNodes, edges: selectedEdges }: OnSelectionChangeParams) => {
-      // Only update if selection came from diagram interaction (not programmatic)
-      if (highlightState.selectionSource !== 'yaml') {
-        const nodeIds = selectedNodes.map(n => n.id);
-        const edgeIds = selectedEdges.map(e => e.id);
+      // Skip if this is a programmatic change (from YAML cursor)
+      if (isProgrammaticChange.current) {
+        console.log('[DiagramCanvas] Skipping - programmatic change');
+        isProgrammaticChange.current = false;
+        return;
+      }
 
-        if (nodeIds.length > 0) {
-          setSelectedNodes(nodeIds, 'diagram');
-        } else if (edgeIds.length > 0) {
-          setSelectedEdges(edgeIds, 'diagram');
-        } else {
-          // Clear selection
-          setSelectedNodes([], 'diagram');
-          setSelectedEdges([], 'diagram');
-        }
+      console.log('[DiagramCanvas] Selection changed:', {
+        nodeCount: selectedNodes.length,
+        edgeCount: selectedEdges.length,
+      });
+
+      const nodeIds = selectedNodes.map(n => n.id);
+      const edgeIds = selectedEdges.map(e => e.id);
+
+      console.log('[DiagramCanvas] Updating store with:', { nodeIds, edgeIds });
+
+      // Process diagram selections from user clicks
+      if (nodeIds.length > 0) {
+        setSelectedNodes(nodeIds, 'diagram');
+      } else if (edgeIds.length > 0) {
+        setSelectedEdges(edgeIds, 'diagram');
+      } else {
+        // Clear selection
+        setSelectedNodes([], 'diagram');
+        setSelectedEdges([], 'diagram');
       }
     },
-    [highlightState.selectionSource, setSelectedNodes, setSelectedEdges]
+    [setSelectedNodes, setSelectedEdges]
   );
 
   // Handle programmatic selection from YAML cursor position
   useEffect(() => {
     if (highlightState.selectionSource === 'yaml' && highlightState.highlightedFromYaml.id) {
+      // Set flag to prevent handleSelectionChange from firing
+      isProgrammaticChange.current = true;
+
       if (highlightState.highlightedFromYaml.type === 'system') {
         // Select the system node
         const nodeId = highlightState.highlightedFromYaml.id;
+        console.log('[DiagramCanvas] Programmatically selecting node:', nodeId);
         setNodes((nds) =>
           nds.map((n) => ({
             ...n,
@@ -97,6 +116,7 @@ export default function DiagramCanvas({
       } else if (highlightState.highlightedFromYaml.type === 'connection') {
         // Select the connection edge
         const edgeId = highlightState.highlightedFromYaml.id;
+        console.log('[DiagramCanvas] Programmatically selecting edge:', edgeId);
         setEdges((eds) =>
           eds.map((e) => ({
             ...e,
@@ -112,7 +132,11 @@ export default function DiagramCanvas({
         );
       }
     } else if (highlightState.selectionSource === 'yaml' && !highlightState.highlightedFromYaml.id) {
+      // Set flag to prevent handleSelectionChange from firing
+      isProgrammaticChange.current = true;
+
       // Clear all selections when cursor is in non-element area
+      console.log('[DiagramCanvas] Programmatically clearing selection');
       setNodes((nds) =>
         nds.map((n) => ({
           ...n,

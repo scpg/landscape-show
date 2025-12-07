@@ -175,8 +175,10 @@ export const useLandscapeStore = create<LandscapeState>((set, get) => ({
       highlightState: {
         ...state.highlightState,
         selectedNodeIds: nodeIds,
+        selectedEdgeIds: [], // Clear edge selection when selecting nodes
         relatedEdgeIds: relatedEdges,
         selectionSource: source,
+        highlightedFromYaml: { type: null, id: null }, // Clear YAML cursor highlight
       },
     }));
   },
@@ -186,8 +188,11 @@ export const useLandscapeStore = create<LandscapeState>((set, get) => ({
     set((state) => ({
       highlightState: {
         ...state.highlightState,
+        selectedNodeIds: [], // Clear node selection when selecting edges
         selectedEdgeIds: edgeIds,
+        relatedEdgeIds: [], // Clear related edges
         selectionSource: source,
+        highlightedFromYaml: { type: null, id: null }, // Clear YAML cursor highlight
       },
     }));
   },
@@ -195,6 +200,7 @@ export const useLandscapeStore = create<LandscapeState>((set, get) => ({
   // Set cursor line from YAML editor
   setCursorLine: (line: number | null) => {
     const yamlContent = get().yamlContent;
+    const currentState = get().highlightState;
 
     if (!yamlContent || line === null) {
       set((state) => ({
@@ -211,12 +217,22 @@ export const useLandscapeStore = create<LandscapeState>((set, get) => ({
     // Parse YAML structure to find which element cursor is in
     const highlighted = YamlLineMapper.getElementAtLine(yamlContent, line);
 
+    // Only update selectionSource to 'yaml' if the highlighted element actually changed
+    const elementChanged =
+      highlighted.type !== currentState.highlightedFromYaml.type ||
+      highlighted.id !== currentState.highlightedFromYaml.id;
+
     set((state) => ({
       highlightState: {
         ...state.highlightState,
         cursorLine: line,
         highlightedFromYaml: highlighted,
-        selectionSource: 'yaml',
+        // Clear diagram selections when cursor moves to different element
+        selectedNodeIds: elementChanged ? [] : state.highlightState.selectedNodeIds,
+        selectedEdgeIds: elementChanged ? [] : state.highlightState.selectedEdgeIds,
+        relatedEdgeIds: elementChanged ? [] : state.highlightState.relatedEdgeIds,
+        // Only set to 'yaml' if element changed, otherwise preserve current source
+        selectionSource: elementChanged ? 'yaml' : state.highlightState.selectionSource,
       },
     }));
   },
