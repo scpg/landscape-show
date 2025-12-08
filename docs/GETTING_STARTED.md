@@ -23,12 +23,30 @@ Your system landscape visualization tool is now set up and running!
 
 ## Quick Commands
 
-### Start the Application
+### 🚀 Simplest Way (Recommended)
+
+**One-command startup (both services):**
+```bash
+npm run dev
+```
+
+**Platform-specific alternatives:**
+```bash
+./dev.sh      # Unix/Linux/macOS
+dev.bat       # Windows
+```
+
+**First-time setup:**
+```bash
+npm run setup
+```
+
+### Manual Commands (if needed)
 
 **Terminal 1 - Backend:**
 ```bash
 cd backend
-PYTHONPATH=/mnt/c/dev/2025/landscape-show/backend .venv/bin/python -m app.main
+PYTHONPATH=/path/to/landscape-show/backend .venv/bin/python -m app.main
 ```
 
 **Terminal 2 - Frontend:**
@@ -37,7 +55,9 @@ cd frontend
 pnpm dev
 ```
 
-Then open: http://localhost:5173
+**Access the application:**
+- Backend API: http://localhost:8000
+- Frontend: http://localhost:5173
 
 ### Using uv for Backend
 

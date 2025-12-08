@@ -37,7 +37,32 @@ Landscape Show allows you to create and visualize system architecture diagrams u
 - Node.js 18 or higher
 - pnpm (recommended for WSL environments)
 
-### Installation
+### Quick Start
+
+**🚀 Universal commands (work on all platforms):**
+
+```bash
+# First time setup
+npm run setup
+
+# Start development environment  
+npm run dev
+```
+
+**✅ Works on:** Windows (native + WSL), Ubuntu Linux, macOS
+
+**Platform-specific alternatives:**
+```bash
+# Cross-platform Node.js scripts (recommended)
+node scripts/setup.js    # Complete setup
+node scripts/dev.js      # Development environment
+
+# Legacy shell scripts (Unix/WSL only)  
+./setup.sh               # Setup
+./dev.sh                 # Development
+```
+
+### Manual Installation
 
 1. **Clone the repository**
    ```bash
@@ -45,25 +70,30 @@ Landscape Show allows you to create and visualize system architecture diagrams u
    cd landscape-show
    ```
 
-2. **Backend Setup**
+2. **Run setup script**
    ```bash
-   cd backend
-   pip install -r requirements.txt
-   ```
-
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   pnpm install
+   npm run setup              # Universal (recommended)
+   node scripts/setup.js      # Direct Node.js script
+   ./setup.sh                 # Unix/Linux/macOS/WSL only
    ```
 
 ### Running the Application
 
+**Simple way (recommended):**
+```bash
+npm run dev              # Universal - starts both backend and frontend
+node scripts/dev.js     # Direct Node.js script
+```
+
+**Platform-specific alternatives:**
+```bash
+./dev.sh                 # Unix/Linux/macOS/WSL only  
+```
+
+**Manual way:**
 1. **Start the backend** (from the `backend` directory):
    ```bash
-   python app/app.py
-   # Or using uvicorn directly:
-   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   PYTHONPATH=/path/to/landscape-show/backend python -m app.main
    ```
 
 2. **Start the frontend** (from the `frontend` directory):
@@ -73,6 +103,25 @@ Landscape Show allows you to create and visualize system architecture diagrams u
 
 3. **Access the application**:
    Open your browser and navigate to `http://localhost:5173`
+
+### Testing Scripts
+
+Verify all scripts work correctly:
+
+```bash
+# Automated testing (local environment)
+npm run test:scripts
+
+# Docker testing (isolated environments) - RECOMMENDED
+npm run test:docker
+
+# Cross-platform compatibility
+# See docs/CROSS_PLATFORM_GUIDE.md for platform-specific setup
+
+# Testing guides
+# See docs/SCRIPT_TESTING.md for comprehensive testing guide  
+# See docs/DOCKER_TESTING.md for Docker testing guide
+```
 
 ## YAML Schema
 

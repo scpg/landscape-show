@@ -1,0 +1,50 @@
+# Alpine-based test environment (lightweight) for development scripts
+FROM alpine:3.19
+
+# Install system dependencies
+RUN apk add --no-cache \
+    curl \
+    wget \
+    git \
+    bash \
+    build-base \
+    linux-headers
+
+# Install Node.js 18
+RUN apk add --no-cache nodejs=~18 npm
+
+# Install Python 3.12
+RUN apk add --no-cache \
+    python3=~3.12 \
+    python3-dev \
+    py3-pip \
+    py3-venv
+
+# Create python symlinks for compatibility
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+
+# Install pnpm globally
+RUN npm install -g pnpm@latest
+
+# Install uv (optional Python package manager)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# Create working directory
+WORKDIR /app
+
+# Copy package.json first (for Docker layer caching)
+COPY package.json ./
+
+# Set up test user
+RUN adduser -D -s /bin/bash testuser
+RUN chown -R testuser:testuser /app
+
+# Default command for interactive testing
+CMD ["/bin/bash"]
+
+# Labels for identification
+LABEL testing.environment="alpine"
+LABEL testing.node.version="18"
+LABEL testing.python.version="3.12"
+LABEL testing.purpose="landscape-show-dev-scripts"

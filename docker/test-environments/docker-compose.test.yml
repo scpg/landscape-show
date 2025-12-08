@@ -1,0 +1,134 @@
+# Docker Compose for script testing environments
+# Run with: docker compose -f docker/test-environments/docker-compose.test.yml up
+
+version: '3.8'
+
+services:
+  # Ubuntu environment - most common Linux distribution
+  test-ubuntu:
+    build:
+      context: ../../
+      dockerfile: docker/test-environments/Dockerfile.ubuntu
+    container_name: landscape-test-ubuntu
+    volumes:
+      - ../../:/app:ro  # Read-only mount to prevent contamination
+      - test-ubuntu-workspace:/workspace  # Separate workspace for testing
+    working_dir: /workspace
+    command: >
+      bash -c "
+        echo '🐧 Ubuntu Test Environment Ready';
+        echo 'Copy project: cp -r /app/* /workspace/';
+        echo 'Run tests: npm run test:scripts';
+        echo 'Run setup: npm run setup';
+        echo 'Run dev: npm run dev';
+        bash
+      "
+    environment:
+      - NODE_ENV=test
+      - TESTING_ENVIRONMENT=ubuntu
+    networks:
+      - test-network
+
+  # Alpine environment - lightweight, different package manager
+  test-alpine:
+    build:
+      context: ../../
+      dockerfile: docker/test-environments/Dockerfile.alpine
+    container_name: landscape-test-alpine
+    volumes:
+      - ../../:/app:ro
+      - test-alpine-workspace:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "
+        echo '🏔️  Alpine Test Environment Ready';
+        echo 'Copy project: cp -r /app/* /workspace/';
+        echo 'Run tests: npm run test:scripts';
+        bash
+      "
+    environment:
+      - NODE_ENV=test
+      - TESTING_ENVIRONMENT=alpine
+    networks:
+      - test-network
+
+  # Minimal environment - tests fallback scenarios
+  test-minimal:
+    build:
+      context: ../../
+      dockerfile: docker/test-environments/Dockerfile.minimal
+    container_name: landscape-test-minimal
+    volumes:
+      - ../../:/app:ro
+      - test-minimal-workspace:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "
+        echo '⚡ Minimal Test Environment Ready';
+        echo 'This tests fallback scenarios (no pnpm, no uv)';
+        echo 'Copy project: cp -r /app/* /workspace/';
+        echo 'Install pnpm: npm install -g pnpm';
+        echo 'Run tests: npm run test:scripts';
+        bash
+      "
+    environment:
+      - NODE_ENV=test
+      - TESTING_ENVIRONMENT=minimal
+    networks:
+      - test-network
+
+  # Automated test runner - runs all tests in sequence
+  test-runner:
+    build:
+      context: ../../
+      dockerfile: docker/test-environments/Dockerfile.ubuntu
+    container_name: landscape-test-runner
+    volumes:
+      - ../../:/app:ro
+      - test-results:/test-results
+    working_dir: /workspace
+    command: >
+      bash -c "
+        echo '🤖 Automated Test Runner Starting...';
+        
+        # Set up workspace
+        cp -r /app/* /workspace/;
+        cd /workspace;
+        
+        # Run automated tests
+        echo '📋 Running automated script tests...';
+        npm run test:scripts > /test-results/automated-tests.log 2>&1;
+        
+        echo '🧪 Running integration test...';
+        npm run test:integration > /test-results/integration-test.log 2>&1;
+        
+        echo '✅ Test run complete. Check /test-results/ for logs.';
+        
+        # Keep container running for result inspection
+        tail -f /dev/null
+      "
+    environment:
+      - NODE_ENV=test
+      - TESTING_ENVIRONMENT=automated
+    depends_on:
+      - test-ubuntu
+      - test-alpine
+      - test-minimal
+    networks:
+      - test-network
+
+# Named volumes for test workspaces (isolated from host)
+volumes:
+  test-ubuntu-workspace:
+    driver: local
+  test-alpine-workspace:
+    driver: local
+  test-minimal-workspace:
+    driver: local
+  test-results:
+    driver: local
+
+# Network for test containers
+networks:
+  test-network:
+    driver: bridge

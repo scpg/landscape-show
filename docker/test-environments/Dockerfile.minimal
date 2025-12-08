@@ -1,0 +1,33 @@
+# Minimal test environment - only basic requirements
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# Install only Node.js and Python (no optional tools)
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 18 (minimum required)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Install only basic Python (no uv, test fallback to pip)
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-venv \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# NO pnpm - test npm fallback
+# NO uv - test pip fallback
+# This tests the "minimal environment" scenario
+
+WORKDIR /app
+COPY package.json ./
+
+CMD ["/bin/bash"]
+
+LABEL testing.environment="minimal"
+LABEL testing.scenario="fallback-tools"

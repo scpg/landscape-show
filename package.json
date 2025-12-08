@@ -1,0 +1,51 @@
+{
+  "name": "landscape-show",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Self-hosted system landscape visualization tool",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "node scripts/run-backend.js",
+    "frontend": "cd frontend && pnpm dev",
+    "setup": "node scripts/setup.js",
+    "setup:backend": "node scripts/setup-backend.js",
+    "setup:frontend": "cd frontend && pnpm install",
+    "dev:unified": "node scripts/dev.js",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && pytest tests/",
+    "test:frontend": "cd frontend && pnpm run build",
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend && pnpm run build",
+    "clean": "npm run clean:backend && npm run clean:frontend",
+    "clean:backend": "cd backend && rm -rf .venv && rm -rf __pycache__ && rm -rf app/__pycache__",
+    "clean:frontend": "cd frontend && rm -rf node_modules && rm -rf dist",
+    "test:scripts": "node scripts/test-scripts.js",
+    "test:integration": "npm run clean && npm run setup && npm run build",
+    "test:docker": "node scripts/test-docker-launcher.js",
+    "test:docker:ubuntu": "node scripts/test-docker-launcher.js ubuntu",
+    "test:docker:alpine": "node scripts/test-docker-launcher.js alpine", 
+    "test:docker:minimal": "node scripts/test-docker-launcher.js minimal",
+    "test:docker:automated": "node scripts/test-docker-launcher.js automated",
+    "test:docker:interactive": "node scripts/test-docker-launcher.js interactive",
+    "test:docker:clean": "node scripts/test-docker-launcher.js clean"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "python": ">=3.12.0"
+  },
+  "keywords": [
+    "landscape",
+    "visualization",
+    "yaml",
+    "self-hosted",
+    "react",
+    "fastapi"
+  ],
+  "author": "Landscape Show Team",
+  "license": "MIT"
+}

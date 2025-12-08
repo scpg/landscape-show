@@ -31,7 +31,10 @@
       "Bash(git push:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(PYTHONPATH=/home/scpg/dev/landscape-show/backend .venv/bin/python:*)"
+      "Bash(PYTHONPATH=/home/scpg/dev/landscape-show/backend .venv/bin/python:*)",
+      "Bash(mv:*)",
+      "Bash(git mv:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

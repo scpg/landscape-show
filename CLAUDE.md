@@ -8,6 +8,44 @@ That file contains the primary project overview, technology stack, architecture,
 
 ---
 
+## 1.5. Development Scripts (CROSS-PLATFORM!)
+
+**IMPORTANT:** The project now has fully cross-platform development scripts. ALWAYS use these instead of manual commands:
+
+### Universal Commands (Work on ALL platforms)
+- **Start development environment:** `npm run dev` (starts both backend & frontend)
+- **First-time setup:** `npm run setup` (installs all dependencies)
+- **Docker testing:** `npm run test:docker` (isolated testing)
+
+**Platforms Supported:** ✅ Windows (native + WSL), ✅ Ubuntu Linux, ✅ macOS
+
+### Available Scripts
+```bash
+npm run dev        # Start both backend and frontend (UNIVERSAL)
+npm run backend    # Start only backend (UNIVERSAL)
+npm run frontend   # Start only frontend (UNIVERSAL) 
+npm run setup      # Complete project setup (UNIVERSAL)
+npm run test       # Run all tests (UNIVERSAL)
+npm run build      # Build for production (UNIVERSAL)
+npm run clean      # Clean all build artifacts (UNIVERSAL)
+
+# Cross-platform alternatives
+node scripts/setup.js    # Direct setup script
+node scripts/dev.js      # Direct development script
+
+# Legacy (Unix/WSL only)
+./setup.sh              # Unix shell script  
+./dev.sh                # Unix shell script
+```
+
+**For AI Assistants:** 
+- ALWAYS use `npm run` commands - they work on ALL platforms
+- NEVER use platform-specific shell scripts (./script.sh) unless user specifically requests them
+- When user mentions their platform (Windows/Mac/Linux), assure them the npm scripts work everywhere
+- See docs/CROSS_PLATFORM_GUIDE.md for platform-specific troubleshooting
+
+---
+
 ## 2. Code Style Guidelines
 
 ### Backend (Python)
