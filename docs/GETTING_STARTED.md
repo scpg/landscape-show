@@ -1,8 +1,8 @@
 # Getting Started with Landscape Show
 
-## Current Status: Phase 1 Complete! ✅
+## Current Status: Phase 2 Complete! ✅
 
-Your system landscape visualization tool is now set up and running!
+The visualization canvas with drag-and-drop is live, and YAML files use the separated, user-friendly schema shown in `backend/data/examples/sample-new-format.yaml`.
 
 ## What's Working
 
@@ -12,14 +12,14 @@ Your system landscape visualization tool is now set up and running!
 - Health check: http://localhost:8000/health
 - Landscapes API: http://localhost:8000/api/landscapes
 
-✅ **Frontend (React + TypeScript)**
+✅ **Frontend (React + TypeScript + React Flow)**
 - Running on: http://localhost:5173
-- Basic UI for viewing landscapes
+- Interactive diagram canvas with drag-and-drop and auto-save
 - API integration working
 
-✅ **Sample Data**
-- Sample landscape file loaded: `backend/data/sample-landscape.yaml`
-- Contains example systems and connections
+✅ **Sample Data (Separated Schema)**
+- New-format sample: `backend/data/examples/sample-new-format.yaml`
+- Uses `systems`, `systems-positions`, `systems-styles`, `connections`, and optional `groups`
 
 ## Quick Commands
 
@@ -205,12 +205,8 @@ curl http://localhost:8000/health
 
 ## Current Limitations
 
-The MVP currently has:
-- ✅ Basic UI showing systems and connections as lists
-- ❌ No visual diagram yet (Phase 2)
-- ❌ No YAML editor (Phase 3)
-- ❌ No drag-and-drop (Phase 2)
-- ❌ No export functionality (Phase 5)
+- YAML editor improvements (Monaco split view) are in progress (Phase 3)
+- Export functionality planned (Phase 5)
 
 ## Need Help?
 

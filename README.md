@@ -2,6 +2,8 @@
 
 A self-hosted system landscape visualization tool that combines simple YAML-based diagram definitions with interactive drag-and-drop positioning.
 
+> If you are an AI assistant, read `AI.md` first, then your assistant file (`CODEX.md`, `CLAUDE.md`, or `GEMINI.md`) before acting.
+
 ## Overview
 
 Landscape Show allows you to create and visualize system architecture diagrams using a simple YAML format while providing a web-based GUI for positioning elements. It's designed for non-technical users who need to document system landscapes without the complexity of traditional diagramming tools.
@@ -125,50 +127,48 @@ npm run test:docker
 
 ## YAML Schema
 
-Create landscape diagrams using this simple YAML format:
+The YAML file is separated for clarity: system definitions, their positions, and their styles live in their own sections. Example:
 
 ```yaml
 metadata:
-  title: "Company System Landscape"
-  description: "Overview of all systems"
-  version: "1.0"
+  title: Company System Landscape (New Format)
+  description: Overview of all company systems and their interconnections
+  version: "1.1"
+  author: System Architecture Team
 
 systems:
   - id: crm-system
-    name: "CRM System"
+    name: CRM System
     type: customer-facing
-    description: "Customer relationship management"
-    owner: "Sales Team"
-    technology: "Salesforce"
-    position:
-      x: 100
-      y: 100
-    style:
-      color: "#4A90E2"
+    description: Customer relationship management platform
+    owner: Sales Team
+    technology: Salesforce
+
+systems-positions:
+  - id: crm-system
+    x: 100
+    y: 100
+
+systems-styles:
+  - id: crm-system
+    color: "#4A90E2"
+    icon: users
 
 connections:
   - from: crm-system
     to: billing-system
-    label: "Customer Orders"
+    label: Customer Orders (default/bezier)
     type: api
-    description: "REST API calls"
+    description: REST API calls - DEFAULT edge type (curved bezier path)
+    style:
+      lineStyle: solid      # solid | dashed | dotted
+      edgeType: default     # default|bezier | straight | step | smoothstep
+      animated: false
 ```
 
-### System Types
-- `customer-facing` - User-facing systems
-- `backend` - Backend services
-- `database` - Database systems
-- `external` - External/third-party systems
-- `integration` - Integration services
-- `analytics` - Analytics platforms
-
-### Connection Types
-- `api` - REST/GraphQL APIs
-- `database` - Direct database connections
-- `file-transfer` - File-based transfers
-- `message-queue` - Message queues (Kafka, RabbitMQ, etc.)
-- `manual` - Manual processes
-- `event` - Event-driven connections
+- **System types**: `customer-facing`, `backend`, `database`, `external`, `integration`, `analytics`
+- **Connection types**: `api`, `database`, `file-transfer`, `message-queue`, `manual`, `event`
+- **Edge/line styles**: edgeType `default/bezier`, `straight`, `step`, `smoothstep`; lineStyle `solid`, `dashed`, `dotted`; `animated` optional.
 
 ## Project Structure
 
@@ -259,6 +259,8 @@ Once the backend is running, visit `http://localhost:8000/docs` for interactive 
 - `POST /api/landscapes/{id}` - Create a new landscape
 - `PUT /api/landscapes/{id}` - Update a landscape
 - `PATCH /api/landscapes/{id}/positions` - Update system positions
+- `POST /api/landscapes/validate` - Validate YAML content without saving (ID-agnostic)
+- `POST /api/landscapes/{id}/validate` - Validate YAML content for a specific landscape (compatibility)
 - `DELETE /api/landscapes/{id}` - Delete a landscape
 
 ## Privacy & Security

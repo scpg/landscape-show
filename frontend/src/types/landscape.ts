@@ -58,7 +58,36 @@ export interface Metadata {
   author?: string;
 }
 
-export interface System {
+/**
+ * YAML-facing separated models (match sample-new-format.yaml)
+ */
+export interface SystemDefinition {
+  id: string;
+  name: string;
+  type: SystemType;
+  description?: string;
+  owner?: string;
+  technology?: string;
+}
+
+export interface SystemPosition {
+  id: string;
+  x: number;
+  y: number;
+}
+
+export interface SystemStyle {
+  id: string;
+  color?: string;
+  icon?: string;
+  backgroundColor?: string;
+  borderColor?: string;
+}
+
+/**
+ * Merged models used by the frontend (API returns merged systems).
+ */
+export interface MergedSystem {
   id: string;
   name: string;
   type: SystemType;
@@ -85,9 +114,22 @@ export interface Group {
   style?: Style;
 }
 
-export interface Landscape {
+export interface MergedLandscape {
   metadata: Metadata;
-  systems: System[];
+  systems: MergedSystem[];
+  connections: Connection[];
+  groups?: Group[];
+}
+
+// Alias to keep existing usage working
+export type Landscape = MergedLandscape;
+
+// Raw/separated representation if needed (mirrors YAML)
+export interface SeparatedLandscape {
+  metadata: Metadata;
+  systems: SystemDefinition[];
+  'systems-positions'?: SystemPosition[];
+  'systems-styles'?: SystemStyle[];
   connections: Connection[];
   groups?: Group[];
 }

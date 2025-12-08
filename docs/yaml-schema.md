@@ -1,52 +1,58 @@
 # YAML Schema Reference
 
-This document describes the YAML format for creating system landscape diagrams.
+This document describes the YAML format for creating system landscape diagrams. The format is **user-focused**: define systems first, then keep positions and styles in their own sections for clarity.
 
 ## Overview
 
-Landscape YAML files consist of three main sections:
+Landscape YAML files are separated into:
 1. **Metadata** - Information about the diagram
-2. **Systems** - The boxes in your diagram
-3. **Connections** - The lines between systems
-4. **Groups** (optional) - Logical groupings of systems
+2. **Systems** - Definitions only (what each system is/does)
+3. **Systems-positions** - Positions by system id
+4. **Systems-styles** - Visual styles by system id
+5. **Connections** - Lines between systems
+6. **Groups** (optional) - Logical groupings of systems
 
 ## Complete Example
 
 ```yaml
 metadata:
-  title: "Company System Landscape"
-  description: "Overview of all systems and their connections"
-  version: "1.0"
-  author: "Architecture Team"
+  title: Company System Landscape (New Format)
+  description: Overview of all company systems and their interconnections
+  version: "1.1"
+  author: System Architecture Team
 
 systems:
   - id: crm-system
-    name: "CRM System"
+    name: CRM System
     type: customer-facing
-    description: "Customer relationship management"
-    owner: "Sales Team"
-    technology: "Salesforce"
-    style:
-      color: "#4A90E2"
-      icon: "users"
-    position:
-      x: 100
-      y: 100
+    description: Customer relationship management platform
+    owner: Sales Team
+    technology: Salesforce
+
+systems-positions:
+  - id: crm-system
+    x: 100
+    y: 100
+
+systems-styles:
+  - id: crm-system
+    color: "#4A90E2"
+    icon: users
 
 connections:
   - from: crm-system
     to: billing-system
-    label: "Customer Orders"
+    label: Customer Orders (default/bezier)
     type: api
-    description: "REST API calls"
+    description: REST API calls - DEFAULT edge type (curved bezier path)
     style:
-      lineStyle: solid
-      edgeType: default
+      lineStyle: solid        # solid | dashed | dotted
+      edgeType: default       # default|bezier | straight | step | smoothstep
       animated: false
 
 groups:
   - id: frontend-systems
-    name: "Customer-Facing Systems"
+    name: Customer-Facing Systems
     systems: [crm-system]
     style:
       backgroundColor: "#f0f8ff"
@@ -76,7 +82,7 @@ metadata:
 
 ## Systems Section
 
-Systems are the boxes/nodes in your diagram.
+Systems are the boxes/nodes in your diagram (definitions only). Position and style are kept in their own sections by ID.
 
 **Field Order (by importance):**
 1. **Primary (Business/Logical)**: Core information about what the system is
@@ -91,8 +97,8 @@ Systems are the boxes/nodes in your diagram.
 | `description` | string | No | Primary | What the system does |
 | `owner` | string | No | Primary | Team or person responsible |
 | `technology` | string | No | Primary | Technology stack or vendor |
-| `style` | object | No | Secondary | Visual styling options |
-| `position` | object | Yes | Tertiary | X,Y coordinates on canvas (auto-updated by UI) |
+| `style` | — | — | Secondary | **Now lives in `systems-styles` by id** |
+| `position` | — | — | Tertiary | **Now lives in `systems-positions` by id** |
 
 ### System Types
 
@@ -103,38 +109,38 @@ Systems are the boxes/nodes in your diagram.
 - `integration` - Integration middleware
 - `analytics` - Analytics and BI platforms
 
-### Position Object
-
-```yaml
-position:
-  x: 100  # Horizontal position in pixels
-  y: 200  # Vertical position in pixels
-```
-
-**Note:** Positions are automatically updated when you drag systems in the GUI.
-
-### Style Object (Optional)
-
-```yaml
-style:
-  color: "#4A90E2"      # Hex color for the system box
-  icon: "database"      # Icon name (future feature)
-```
-
-### Example System
+### Example System Definition
 
 ```yaml
 - id: payment-gateway
-  name: "Payment Gateway"
+  name: Payment Gateway
   type: external
-  description: "Stripe payment processing"
-  owner: "Finance Team"
-  technology: "Stripe API"
-  style:
-    color: "#6772E5"
-  position:
+  description: Stripe payment processing
+  owner: Finance Team
+  technology: Stripe API
+```
+
+### systems-positions Section
+
+Map system IDs to coordinates. Updated automatically when you drag systems in the GUI.
+
+```yaml
+systems-positions:
+  - id: payment-gateway
     x: 500
     y: 300
+```
+
+### systems-styles Section
+
+Map system IDs to visual styles.
+
+```yaml
+systems-styles:
+  - id: payment-gateway
+    color: "#6772E5"   # Hex color for the system box
+    icon: database     # Icon name (future feature)
+```
 ```
 
 ## Connections Section
@@ -312,87 +318,91 @@ Here are some suggested colors for different system types:
 | Integration | Green | `#27AE60` |
 | Analytics | Deep Purple | `#8E44AD` |
 
-## Full Example: E-Commerce Platform
+## Full Example: E-Commerce Platform (Separated Format)
 
 ```yaml
 metadata:
-  title: "E-Commerce Platform Architecture"
-  description: "Main systems powering our online store"
+  title: E-Commerce Platform Architecture
+  description: Main systems powering our online store
   version: "1.0"
-  author: "Platform Architecture Team"
+  author: Platform Architecture Team
 
 systems:
   - id: web-app
-    name: "Web Application"
+    name: Web Application
     type: customer-facing
-    description: "Customer-facing e-commerce website"
-    owner: "Frontend Team"
-    technology: "React + Next.js"
-    style: {color: "#4A90E2"}
-    position: {x: 400, y: 50}
+    description: Customer-facing e-commerce website
+    owner: Frontend Team
+    technology: React + Next.js
 
   - id: mobile-app
-    name: "Mobile App"
+    name: Mobile App
     type: customer-facing
-    description: "iOS and Android mobile apps"
-    owner: "Mobile Team"
-    technology: "React Native"
-    style: {color: "#4A90E2"}
-    position: {x: 700, y: 50}
+    description: iOS and Android mobile apps
+    owner: Mobile Team
+    technology: React Native
 
   - id: api-gateway
-    name: "API Gateway"
+    name: API Gateway
     type: backend
-    description: "Kong API Gateway"
-    owner: "Platform Team"
-    technology: "Kong"
-    style: {color: "#F39C12"}
-    position: {x: 550, y: 200}
+    description: Kong API Gateway
+    owner: Platform Team
+    technology: Kong
 
   - id: product-service
-    name: "Product Service"
+    name: Product Service
     type: backend
-    description: "Product catalog and inventory"
-    owner: "Backend Team"
-    technology: "Node.js"
-    style: {color: "#F39C12"}
-    position: {x: 300, y: 350}
+    description: Product catalog and inventory
+    owner: Backend Team
+    technology: Node.js
 
   - id: order-service
-    name: "Order Service"
+    name: Order Service
     type: backend
-    description: "Order processing and management"
-    owner: "Backend Team"
-    technology: "Node.js"
-    style: {color: "#F39C12"}
-    position: {x: 550, y: 350}
+    description: Order processing and management
+    owner: Backend Team
+    technology: Node.js
 
   - id: payment-service
-    name: "Payment Service"
+    name: Payment Service
     type: backend
-    description: "Payment processing"
-    owner: "Backend Team"
-    technology: "Java Spring"
-    style: {color: "#F39C12"}
-    position: {x: 800, y: 350}
+    description: Payment processing
+    owner: Backend Team
+    technology: Java Spring
 
   - id: main-db
-    name: "PostgreSQL"
+    name: PostgreSQL
     type: database
-    description: "Main relational database"
-    owner: "Data Team"
-    technology: "PostgreSQL 15"
-    style: {color: "#336791"}
-    position: {x: 550, y: 500}
+    description: Main relational database
+    owner: Data Team
+    technology: PostgreSQL 15
 
   - id: stripe
-    name: "Stripe"
+    name: Stripe
     type: external
-    description: "Payment gateway"
-    owner: "Finance Team"
-    technology: "Stripe API"
-    style: {color: "#6772E5"}
-    position: {x: 1000, y: 350}
+    description: Payment gateway
+    owner: Finance Team
+    technology: Stripe API
+
+systems-positions:
+  - { id: web-app, x: 400, y: 50 }
+  - { id: mobile-app, x: 700, y: 50 }
+  - { id: api-gateway, x: 550, y: 200 }
+  - { id: product-service, x: 300, y: 350 }
+  - { id: order-service, x: 550, y: 350 }
+  - { id: payment-service, x: 800, y: 350 }
+  - { id: main-db, x: 550, y: 500 }
+  - { id: stripe, x: 1000, y: 350 }
+
+systems-styles:
+  - { id: web-app, color: "#4A90E2" }
+  - { id: mobile-app, color: "#4A90E2" }
+  - { id: api-gateway, color: "#F39C12" }
+  - { id: product-service, color: "#F39C12" }
+  - { id: order-service, color: "#F39C12" }
+  - { id: payment-service, color: "#F39C12" }
+  - { id: main-db, color: "#336791" }
+  - { id: stripe, color: "#6772E5" }
 
 connections:
   - {from: web-app, to: api-gateway, label: "HTTPS", type: api}
@@ -407,12 +417,12 @@ connections:
 
 groups:
   - id: frontend
-    name: "Customer Applications"
+    name: Customer Applications
     systems: [web-app, mobile-app]
     style: {backgroundColor: "#e8f4f8", borderColor: "#4A90E2"}
 
   - id: backend
-    name: "Backend Services"
+    name: Backend Services
     systems: [api-gateway, product-service, order-service, payment-service]
     style: {backgroundColor: "#fff4e6", borderColor: "#F39C12"}
 ```
