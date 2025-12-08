@@ -40,6 +40,22 @@ class PositionUpdates(BaseModel):
     updates: dict[str, PositionUpdate]
 
 
+@router.post("/validate")
+async def validate_landscape_content(yaml_content: str = Body(..., media_type="text/plain")):
+    """
+    Validate YAML content without saving.
+
+    This endpoint is ID-agnostic so editors can validate arbitrary drafts
+    without touching persisted files.
+    """
+    is_valid, error = YAMLService.validate_yaml(yaml_content)
+
+    if is_valid:
+        return {"valid": True, "message": "YAML is valid"}
+    else:
+        return {"valid": False, "error": error}
+
+
 @router.get("", response_model=list[LandscapeListItem])
 async def list_landscapes():
     """List all available landscapes."""
@@ -160,7 +176,7 @@ async def delete_landscape(landscape_id: str):
 
 @router.post("/{landscape_id}/validate")
 async def validate_landscape(yaml_content: str = Body(..., media_type="text/plain")):
-    """Validate YAML content without saving."""
+    """Validate YAML content for a specific landscape (kept for compatibility)."""
     is_valid, error = YAMLService.validate_yaml(yaml_content)
 
     if is_valid:

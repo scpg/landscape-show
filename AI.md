@@ -1,5 +1,14 @@
 # AI Assistant General Guidelines - Landscape Show
 
+## Must-Do Checklist (read first, every time)
+1) Read this file fully before any action.
+2) Verify backend virtualenv exists/active before running Python; prefer project scripts (`npm run backend`, `npm run test:backend`).
+3) Use cross-platform commands (`npm run setup|dev|test|backend|frontend` or Node scripts); avoid platform-specific shells unless requested.
+4) No outbound network/telemetry; keep frontend-backend interactions via the REST API only.
+5) Keep backend models, frontend types, and docs in sync; update `docs/yaml-schema.md` first for schema changes.
+
+**AI files:** Each assistant has its own guideline file. Read `AI.md` first, then check your assistant-specific file (e.g., `CODEX.md`, `CLAUDE.md`, `GEMINI.md`) to stay aligned and transparent across tools.
+
 ## 1. Project Overview
 
 **Landscape Show** is a self-hosted system landscape visualization tool. It allows users to define system architectures in a simple YAML format and visualize them with interactive drag-and-drop diagrams. The core feature is the bidirectional synchronization between the YAML text and the visual diagram.
@@ -81,6 +90,8 @@ connections:
 *   `GET /landscapes/{id}`: Get the content of a specific landscape.
 *   `PUT /landscapes/{id}`: Overwrite a landscape file with new content. Used for saving from the editor.
 *   `PATCH /landscapes/{id}/positions`: A special endpoint to only update the `position` of systems. Used for drag-and-drop saves.
+*   `POST /landscapes/validate`: Validate YAML content without saving (generic, ID-agnostic).
+*   `POST /landscapes/{id}/validate`: Validate YAML content for a specific landscape (kept for compatibility).
 
 ## 7. Code Style and Project Conventions
 

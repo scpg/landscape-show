@@ -2,7 +2,7 @@
 
 ## 1. Primary Directive
 
-**Critical:** Before beginning any task, you **must** first review the `AI.md` file in the root directory.
+**Critical:** Before beginning any task, you **must** first review the `AI.md` file in the root directory and follow its checklist.
 
 That file contains the primary project overview, technology stack, architecture, status, and other general guidelines. This file, `CLAUDE.md`, only contains specific instructions and reminders for you.
 

@@ -31,8 +31,8 @@
     "test:docker:clean": "node scripts/test-docker-launcher.js clean"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3"
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0"
   },
   "engines": {
     "node": ">=18.0.0",

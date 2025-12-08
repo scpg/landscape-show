@@ -2,7 +2,7 @@
 
 ## 1. Primary Directive
 
-Before beginning any task, I will first review the `AI.md` file in the root directory. This file contains the primary project overview, technology stack, architecture, and status, and serves as the "single source of truth" for project context.
+Before beginning any task, I will first review the `AI.md` file in the root directory and follow its checklist. This file contains the primary project overview, technology stack, architecture, and status, and serves as the "single source of truth" for project context.
 
 ## 2. My Core Understanding
 
