@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException, Body
 from pydantic import BaseModel
-from app.models.landscape import Landscape
+from app.models.landscape import MergedLandscape
 from app.services.file_service import FileService
 from app.services.yaml_service import YAMLService
 from app.config import settings
@@ -26,7 +26,7 @@ class LandscapeResponse(BaseModel):
     """Response model for landscape data."""
     id: str
     yaml: str
-    parsed: Landscape
+    parsed: MergedLandscape
 
 
 class PositionUpdate(BaseModel):
@@ -55,7 +55,8 @@ async def get_landscape(landscape_id: str):
     """Get a specific landscape by ID."""
     try:
         yaml_content = await file_service.read_landscape(landscape_id)
-        parsed = YAMLService.parse_yaml(yaml_content)
+        # Use the new service method to get the merged data structure
+        parsed = YAMLService.get_merged_landscape(yaml_content)
 
         return LandscapeResponse(
             id=landscape_id,

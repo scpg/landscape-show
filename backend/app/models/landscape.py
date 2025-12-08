@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -68,8 +68,44 @@ class Metadata(BaseModel):
     author: Optional[str] = Field(None, description="Author of the landscape")
 
 
+# --- New Separated Models ---
+
+class SystemDefinition(BaseModel):
+    """Core business/logical information about a system."""
+    id: str = Field(..., description="Unique identifier for the system")
+    name: str = Field(..., description="Display name of the system")
+    type: SystemType = Field(..., description="Type of system")
+    description: Optional[str] = Field(None, description="Description of the system")
+    owner: Optional[str] = Field(None, description="Team or person owning the system")
+    technology: Optional[str] = Field(None, description="Technology stack")
+
+    @field_validator('id')
+    @classmethod
+    def validate_id(cls, v: str) -> str:
+        """Validate that ID is lowercase with hyphens only."""
+        if not v:
+            raise ValueError("ID cannot be empty")
+        if not v.replace('-', '').replace('_', '').isalnum():
+            raise ValueError("ID must contain only alphanumeric characters, hyphens, and underscores")
+        return v.lower()
+
+class SystemStyle(BaseModel):
+    """Visual styling for a system, referenced by ID."""
+    id: str = Field(..., description="ID of the system to style")
+    color: Optional[str] = Field(None, description="Color in hex format (e.g., #4A90E2)")
+    icon: Optional[str] = Field(None, description="Icon name")
+
+class SystemPosition(BaseModel):
+    """Positioning for a system, referenced by ID."""
+    id: str = Field(..., description="ID of the system to position")
+    x: float = Field(..., description="X coordinate")
+    y: float = Field(..., description="Y coordinate")
+
+
+# --- Merged Model (for internal application use) ---
+
 class System(BaseModel):
-    """A system in the landscape."""
+    """A system in the landscape (merged view)."""
     # Primary: Business/Logical information
     id: str = Field(..., description="Unique identifier for the system")
     name: str = Field(..., description="Display name of the system")
@@ -82,16 +118,8 @@ class System(BaseModel):
     # Tertiary: Technical/UI positioning
     position: Position = Field(..., description="Position on the canvas")
 
-    @field_validator('id')
-    @classmethod
-    def validate_id(cls, v: str) -> str:
-        """Validate that ID is lowercase with hyphens only."""
-        if not v:
-            raise ValueError("ID cannot be empty")
-        if not v.replace('-', '').replace('_', '').isalnum():
-            raise ValueError("ID must contain only alphanumeric characters, hyphens, and underscores")
-        return v.lower()
 
+# --- Other Models ---
 
 class Connection(BaseModel):
     """A connection between two systems."""
@@ -114,17 +142,22 @@ class Group(BaseModel):
     style: Optional[Style] = Field(None, description="Visual styling options")
 
 
+# --- Top-level Landscape Model (New Structure) ---
+
 class Landscape(BaseModel):
-    """Complete landscape model."""
+    """Complete landscape model, parsed from YAML."""
     metadata: Metadata = Field(..., description="Metadata about the landscape")
-    systems: list[System] = Field(default_factory=list, description="List of systems")
-    connections: list[Connection] = Field(default_factory=list, description="List of connections")
-    groups: Optional[list[Group]] = Field(default_factory=list, description="Optional groupings")
+    systems: List[SystemDefinition] = Field(default_factory=list, description="List of system definitions")
+    connections: List[Connection] = Field(default_factory=list, description="List of connections")
+    groups: Optional[List[Group]] = Field(default_factory=list, description="Optional groupings")
+    
+    systems_styles: Optional[List[SystemStyle]] = Field([], alias="systems-styles", description="Visual styles for systems")
+    systems_positions: Optional[List[SystemPosition]] = Field([], alias="systems-positions", description="Positions for systems")
 
     @field_validator('systems')
     @classmethod
-    def validate_unique_system_ids(cls, v: list[System]) -> list[System]:
-        """Ensure all system IDs are unique."""
+    def validate_unique_system_ids(cls, v: list[SystemDefinition]) -> list[SystemDefinition]:
+        """Ensure all system definition IDs are unique."""
         ids = [system.id for system in v]
         if len(ids) != len(set(ids)):
             raise ValueError("System IDs must be unique")
@@ -144,30 +177,42 @@ class Landscape(BaseModel):
         return v
 
     class Config:
+        populate_by_name = True
         json_schema_extra = {
             "example": {
                 "metadata": {
-                    "title": "Company System Landscape",
-                    "description": "Overview of all systems",
-                    "version": "1.0"
+                    "title": "Company System Landscape"
                 },
                 "systems": [
                     {
                         "id": "crm-system",
                         "name": "CRM System",
                         "type": "customer-facing",
-                        "description": "Customer relationship management",
-                        "owner": "Sales Team",
-                        "position": {"x": 100, "y": 100}
                     }
+                ],
+                "systems-positions": [
+                    {"id": "crm-system", "x": 100, "y": 100}
+                ],
+                "systems-styles": [
+                    {"id": "crm-system", "color": "#4A90E2"}
                 ],
                 "connections": [
                     {
                         "from": "crm-system",
                         "to": "billing-system",
-                        "label": "Customer Orders",
                         "type": "api"
                     }
                 ]
             }
         }
+
+
+class MergedLandscape(BaseModel):
+    """
+    A landscape view where the separated system data has been merged.
+    This is used to send a unified data structure to the frontend.
+    """
+    metadata: Metadata = Field(..., description="Metadata about the landscape")
+    systems: list[System] = Field(default_factory=list, description="List of merged systems")
+    connections: list[Connection] = Field(default_factory=list, description="List of connections")
+    groups: Optional[list[Group]] = Field(default_factory=list, description="Optional groupings")

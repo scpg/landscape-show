@@ -9,7 +9,8 @@ class Settings(BaseSettings):
 
     app_name: str = "Landscape Show"
     app_version: str = "0.1.0"
-    data_dir: Path = Path("data")
+    # Make data_dir an absolute path relative to this file's location
+    data_dir: Path = Path(__file__).parent.parent / "data"
     cors_origins: list[str] = ["http://localhost:5173", "http://localhost:3000"]
     host: str = "0.0.0.0"
     port: int = 8000

@@ -19,35 +19,51 @@ class FileService:
         Args:
             data_dir: Directory where landscape files are stored
         """
-        self.data_dir = Path(data_dir)
+        self.data_dir = Path(data_dir).resolve()
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
     def _get_file_path(self, landscape_id: str) -> Path:
-        """Get the file path for a landscape ID."""
-        # Sanitize the landscape ID to prevent directory traversal
-        safe_id = landscape_id.replace('/', '_').replace('..', '_')
-        return self.data_dir / f"{safe_id}.yaml"
+        """
+        Get the safe file path for a landscape ID, allowing subdirectories.
+        
+        Raises:
+            PermissionError: If the path attempts to traverse outside the data directory.
+        """
+        # Safely join the path and resolve it to an absolute path
+        file_path = (self.data_dir / f"{landscape_id}.yaml").resolve()
+
+        # Security check: Ensure the resolved path is within the data directory
+        if self.data_dir not in file_path.parents:
+            raise PermissionError(f"Directory traversal attempt detected for: {landscape_id}")
+
+        return file_path
 
     async def list_landscapes(self) -> list[dict]:
         """
-        List all available landscape files.
+        List all available landscape files, including those in subdirectories.
 
         Returns:
             list[dict]: List of landscape metadata
         """
         landscapes = []
 
-        for file_path in self.data_dir.glob("*.yaml"):
+        # Use rglob to find all yaml files recursively
+        for file_path in self.data_dir.rglob("*.yaml"):
             try:
-                content = await self.read_landscape(file_path.stem)
+                # Construct the ID from the relative path to the data_dir
+                relative_path = file_path.relative_to(self.data_dir)
+                landscape_id = str(relative_path.with_suffix(''))
+
+                content = await self.read_landscape(landscape_id)
+                # Use the raw parser to just get metadata without crashing on old formats
                 landscape = YAMLService.parse_yaml(content)
 
                 landscapes.append({
-                    "id": file_path.stem,
+                    "id": landscape_id,
                     "title": landscape.metadata.title,
                     "description": landscape.metadata.description,
                     "version": landscape.metadata.version,
-                    "last_updated": landscape.metadata.last_updated,
+                    "last_updated": landscape.metadata.last_updated.isoformat() if landscape.metadata.last_updated else None,
                     "file_path": str(file_path)
                 })
             except Exception as e:

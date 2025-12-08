@@ -1,9 +1,9 @@
 """Service for YAML parsing and validation."""
 
 import yaml
-from typing import Any
+from typing import Any, List
 from pydantic import ValidationError
-from app.models.landscape import Landscape
+from app.models.landscape import Landscape, System, SystemDefinition, MergedLandscape
 
 
 class YAMLService:
@@ -12,17 +12,16 @@ class YAMLService:
     @staticmethod
     def parse_yaml(yaml_content: str) -> Landscape:
         """
-        Parse YAML content into a Landscape model.
+        Parse YAML content into a raw Landscape model with separated data.
 
         Args:
             yaml_content: YAML string content
 
         Returns:
-            Landscape: Validated Landscape object
+            Landscape: Validated Landscape object with separated system data.
 
         Raises:
             ValueError: If YAML is invalid or doesn't match schema
-            ValidationError: If Pydantic validation fails
         """
         try:
             data = yaml.safe_load(yaml_content)
@@ -36,6 +35,55 @@ class YAMLService:
             raise ValueError(f"Invalid YAML syntax: {str(e)}")
         except ValidationError as e:
             raise ValueError(f"Schema validation failed: {str(e)}")
+
+    @staticmethod
+    def get_merged_landscape(yaml_content: str) -> MergedLandscape:
+        """
+        Parses YAML and merges the separated system data (definition, style,
+        position) into a unified list of System objects.
+
+        This is the primary method for getting data ready for the frontend.
+
+        Args:
+            yaml_content: The YAML string content.
+
+        Returns:
+            MergedLandscape: A landscape object with a unified `systems` list.
+        
+        Raises:
+            ValueError: If a system definition is missing a position.
+        """
+        raw_landscape = YAMLService.parse_yaml(yaml_content)
+        
+        styles = {s.id: s for s in raw_landscape.systems_styles}
+        positions = {p.id: p for p in raw_landscape.systems_positions}
+
+        merged_systems: List[System] = []
+        for sys_def in raw_landscape.systems:
+            sys_pos = positions.get(sys_def.id)
+            if not sys_pos:
+                raise ValueError(f"System '{sys_def.id}' is missing a position in 'systems-positions'.")
+
+            sys_style = styles.get(sys_def.id)
+            
+            merged_system = System(
+                id=sys_def.id,
+                name=sys_def.name,
+                type=sys_def.type,
+                description=sys_def.description,
+                owner=sys_def.owner,
+                technology=sys_def.technology,
+                position={'x': sys_pos.x, 'y': sys_pos.y},
+                style={'color': sys_style.color, 'icon': sys_style.icon} if sys_style else None
+            )
+            merged_systems.append(merged_system)
+
+        return MergedLandscape(
+            metadata=raw_landscape.metadata,
+            systems=merged_systems,
+            connections=raw_landscape.connections,
+            groups=raw_landscape.groups
+        )
 
     @staticmethod
     def serialize_to_yaml(landscape: Landscape) -> str:
@@ -87,7 +135,7 @@ class YAMLService:
         position_updates: dict[str, dict[str, float]]
     ) -> str:
         """
-        Update system positions in YAML content.
+        Update system positions in the `systems-positions` block of the YAML content.
 
         Args:
             yaml_content: Original YAML string
@@ -101,11 +149,18 @@ class YAMLService:
         """
         landscape = YAMLService.parse_yaml(yaml_content)
 
-        # Update positions
-        for system in landscape.systems:
-            if system.id in position_updates:
-                pos_data = position_updates[system.id]
-                system.position.x = pos_data.get('x', system.position.x)
-                system.position.y = pos_data.get('y', system.position.y)
+        # Create a dictionary for easy lookup
+        positions_dict = {pos.id: pos for pos in landscape.systems_positions}
 
+        # Update positions
+        for sys_id, new_pos_data in position_updates.items():
+            if sys_id in positions_dict:
+                positions_dict[sys_id].x = new_pos_data.get('x', positions_dict[sys_id].x)
+                positions_dict[sys_id].y = new_pos_data.get('y', positions_dict[sys_id].y)
+            else:
+                # This case could happen if a system exists but has no entry in systems-positions yet
+                # For now, we only update existing ones. To be robust, we could add a new one.
+                pass 
+
+        # The models are mutable, so the landscape object is now updated.
         return YAMLService.serialize_to_yaml(landscape)
