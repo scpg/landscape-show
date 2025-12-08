@@ -45,7 +45,7 @@ Related to #
 <!-- Mark completed items with an 'x' -->
 - [ ] Updated README.md (if needed)
 - [ ] Updated CLAUDE.md (if architecture changed)
-- [ ] Updated FILE_INDEX.md (if files added/changed)
+- [ ] Updated docs/FILE_INDEX.md (if files added/changed)
 - [ ] Updated docs/yaml-schema.md (if YAML schema changed)
 - [ ] Updated API documentation (if endpoints changed)
 - [ ] Added/updated code comments

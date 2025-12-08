@@ -298,8 +298,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for:
 - **Main Documentation**: [README.md](../README.md)
 - **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Technical Reference**: [CLAUDE.md](../CLAUDE.md)
-- **File Index**: [FILE_INDEX.md](../FILE_INDEX.md)
-- **Getting Started**: [GETTING_STARTED.md](../GETTING_STARTED.md)
+- **File Index**: [docs/FILE_INDEX.md](../docs/FILE_INDEX.md)
+- **Getting Started**: [docs/GETTING_STARTED.md](../docs/GETTING_STARTED.md)
 
 ## 💡 Tips
 

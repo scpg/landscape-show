@@ -6,13 +6,13 @@ This document helps you find the right documentation for your needs.
 
 | Document | Purpose | Primary Audience | When to Read |
 |----------|---------|------------------|--------------|
-| **[README.md](README.md)** | Project overview, features, setup | Everyone | First time viewing project |
-| **[CLAUDE.md](CLAUDE.md)** | Technical reference for AI assistants | AI Tools, Developers | When modifying code or understanding architecture |
+| **[README.md](../README.md)** | Project overview, features, setup | Everyone | First time viewing project |
+| **[CLAUDE.md](../CLAUDE.md)** | Technical reference for AI assistants | AI Tools, Developers | When modifying code or understanding architecture |
 | **[FILE_INDEX.md](FILE_INDEX.md)** | Complete file map and architecture | Developers | When navigating codebase or adding features |
 | **[GETTING_STARTED.md](GETTING_STARTED.md)** | Quick start guide | New developers | First time setup |
 | **[PHASE2_COMPLETE.md](PHASE2_COMPLETE.md)** | Phase 2 feature documentation | Users, Developers | Understanding current features |
-| **[docs/yaml-schema.md](docs/yaml-schema.md)** | YAML format specification | Users creating landscapes | Writing YAML files |
-| **[docs/deployment.md](docs/deployment.md)** | Production deployment | DevOps, System Admins | Deploying to production |
+| **[yaml-schema.md](yaml-schema.md)** | YAML format specification | Users creating landscapes | Writing YAML files |
+| **[deployment.md](deployment.md)** | Production deployment | DevOps, System Admins | Deploying to production |
 
 ---
 
@@ -21,16 +21,16 @@ This document helps you find the right documentation for your needs.
 ### I Want To...
 
 **...understand what this project does**
-→ Read [README.md](README.md) first
+→ Read [README.md](../README.md) first
 
 **...set up the development environment**
 → Follow [GETTING_STARTED.md](GETTING_STARTED.md)
 
 **...create a landscape YAML file**
-→ Reference [docs/yaml-schema.md](docs/yaml-schema.md)
+→ Reference [yaml-schema.md](yaml-schema.md)
 
 **...understand the code architecture**
-→ Study [CLAUDE.md](CLAUDE.md) and [FILE_INDEX.md](FILE_INDEX.md)
+→ Study [CLAUDE.md](../CLAUDE.md) and [FILE_INDEX.md](FILE_INDEX.md)
 
 **...find a specific file**
 → Search [FILE_INDEX.md](FILE_INDEX.md)
@@ -39,26 +39,26 @@ This document helps you find the right documentation for your needs.
 → Read [PHASE2_COMPLETE.md](PHASE2_COMPLETE.md)
 
 **...deploy to production**
-→ Follow [docs/deployment.md](docs/deployment.md)
+→ Follow [deployment.md](deployment.md)
 
 **...modify the backend**
-→ Check [CLAUDE.md](CLAUDE.md) → Backend section
+→ Check [CLAUDE.md](../CLAUDE.md) → Backend section
 
 **...modify the frontend**
-→ Check [CLAUDE.md](CLAUDE.md) → Frontend section
+→ Check [CLAUDE.md](../CLAUDE.md) → Frontend section
 
 **...add a new feature**
-→ Review [CLAUDE.md](CLAUDE.md) and [FILE_INDEX.md](FILE_INDEX.md)
+→ Review [CLAUDE.md](../CLAUDE.md) and [FILE_INDEX.md](FILE_INDEX.md)
 
 ---
 
 ## 📖 Reading Order for New Developers
 
-1. **[README.md](README.md)** - Get the big picture (10 min)
+1. **[README.md](../README.md)** - Get the big picture (10 min)
 2. **[GETTING_STARTED.md](GETTING_STARTED.md)** - Set up environment (15 min)
-3. **[docs/yaml-schema.md](docs/yaml-schema.md)** - Understand data format (15 min)
+3. **[yaml-schema.md](yaml-schema.md)** - Understand data format (15 min)
 4. **[PHASE2_COMPLETE.md](PHASE2_COMPLETE.md)** - See what's working (10 min)
-5. **[CLAUDE.md](CLAUDE.md)** - Deep dive into architecture (30 min)
+5. **[CLAUDE.md](../CLAUDE.md)** - Deep dive into architecture (30 min)
 6. **[FILE_INDEX.md](FILE_INDEX.md)** - Map the codebase (20 min)
 
 **Total time:** ~1.5 hours to fully understand the project
@@ -67,7 +67,7 @@ This document helps you find the right documentation for your needs.
 
 ## 🤖 For AI Coding Assistants
 
-**Primary Reference:** [CLAUDE.md](CLAUDE.md)
+**Primary Reference:** [CLAUDE.md](../CLAUDE.md)
 
 This file contains:
 - Complete technology stack
@@ -81,7 +81,7 @@ This file contains:
 
 **Secondary References:**
 - [FILE_INDEX.md](FILE_INDEX.md) - File-by-file breakdown
-- [docs/yaml-schema.md](docs/yaml-schema.md) - Detailed YAML reference
+- [yaml-schema.md](yaml-schema.md) - Detailed YAML reference
 
 ---
 
@@ -89,7 +89,7 @@ This file contains:
 
 **Primary Reference:** [GETTING_STARTED.md](GETTING_STARTED.md)
 
-**Creating Landscapes:** [docs/yaml-schema.md](docs/yaml-schema.md)
+**Creating Landscapes:** [yaml-schema.md](yaml-schema.md)
 
 **Feature Documentation:** [PHASE2_COMPLETE.md](PHASE2_COMPLETE.md)
 
@@ -97,7 +97,7 @@ This file contains:
 
 ## 🔧 For Developers
 
-**Architecture Overview:** [CLAUDE.md](CLAUDE.md)
+**Architecture Overview:** [CLAUDE.md](../CLAUDE.md)
 
 **File Navigation:** [FILE_INDEX.md](FILE_INDEX.md)
 
@@ -107,9 +107,9 @@ This file contains:
 
 ## 🚀 For DevOps/Deployment
 
-**Primary Reference:** [docs/deployment.md](docs/deployment.md)
+**Primary Reference:** [deployment.md](deployment.md)
 
-**Configuration:** [CLAUDE.md](CLAUDE.md) → Configuration section
+**Configuration:** [CLAUDE.md](../CLAUDE.md) → Configuration section
 
 ---
 
@@ -121,10 +121,10 @@ This file contains:
 |---------|-------------------|
 | New feature added | README.md, CLAUDE.md, FILE_INDEX.md |
 | New file created | FILE_INDEX.md, CLAUDE.md |
-| YAML schema changed | docs/yaml-schema.md, CLAUDE.md |
+| YAML schema changed | yaml-schema.md, CLAUDE.md |
 | API endpoint added | README.md, CLAUDE.md |
 | Phase completed | README.md, create PHASE_X_COMPLETE.md |
-| Deployment process changed | docs/deployment.md |
+| Deployment process changed | deployment.md |
 | File purpose changed | FILE_INDEX.md |
 
 ### Documentation Standards

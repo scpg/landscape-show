@@ -63,7 +63,7 @@ Thank you for your interest in contributing to Landscape Show! This document pro
 
 ## 📁 Project Structure
 
-See [FILE_INDEX.md](../FILE_INDEX.md) for complete file map.
+See [docs/FILE_INDEX.md](../docs/FILE_INDEX.md) for complete file map.
 
 ### Key Directories
 
@@ -253,7 +253,7 @@ Before submitting a PR, ensure:
 - [ ] No linting errors
 - [ ] Documentation updated (if needed)
 - [ ] CLAUDE.md updated (if architecture changed)
-- [ ] FILE_INDEX.md updated (if files added/changed)
+- [ ] docs/FILE_INDEX.md updated (if files added/changed)
 - [ ] Commit messages follow conventions
 - [ ] Branch is up to date with main
 
@@ -277,7 +277,7 @@ Brief description of changes
 ## Documentation
 - [ ] Updated relevant documentation
 - [ ] Updated CLAUDE.md (if needed)
-- [ ] Updated FILE_INDEX.md (if needed)
+- [ ] Updated docs/FILE_INDEX.md (if needed)
 
 ## Screenshots (if applicable)
 Add screenshots for UI changes
@@ -298,8 +298,8 @@ Add screenshots for UI changes
 Update documentation when:
 
 - **Adding new features** → Update README.md, CLAUDE.md
-- **Changing architecture** → Update CLAUDE.md, FILE_INDEX.md
-- **Adding new files** → Update FILE_INDEX.md
+- **Changing architecture** → Update CLAUDE.md, docs/FILE_INDEX.md
+- **Adding new files** → Update docs/FILE_INDEX.md
 - **Changing API** → Update CLAUDE.md, API docs
 - **Changing YAML schema** → Update docs/yaml-schema.md
 - **Completing phases** → Create PHASE_X_COMPLETE.md
@@ -310,7 +310,7 @@ Update documentation when:
 |------|---------|----------------|
 | README.md | Project overview | Major features, setup changes |
 | CLAUDE.md | Technical reference | Architecture, API, file changes |
-| FILE_INDEX.md | File map | New files, purpose changes |
+| docs/FILE_INDEX.md | File map | New files, purpose changes |
 | docs/yaml-schema.md | YAML reference | Schema changes |
 | PHASE_X_COMPLETE.md | Phase documentation | Phase completion |
 
@@ -390,9 +390,9 @@ Contributors will be:
 
 ## 📞 Getting Help
 
-- **Documentation:** Start with [DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md)
+- **Documentation:** Start with [docs/DOCUMENTATION_INDEX.md](../docs/DOCUMENTATION_INDEX.md)
 - **Technical details:** See [CLAUDE.md](../CLAUDE.md)
-- **Setup issues:** Check [GETTING_STARTED.md](../GETTING_STARTED.md)
+- **Setup issues:** Check [docs/GETTING_STARTED.md](../docs/GETTING_STARTED.md)
 - **Questions:** Open a GitHub Discussion
 - **Bugs:** Open a GitHub Issue
 
